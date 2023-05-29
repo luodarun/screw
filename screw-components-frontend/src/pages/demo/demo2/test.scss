@@ -1,0 +1,7 @@
+@use 'sass:color';
+@use 'sass:string';
+
+// string.unquote去除引号,color.ie-hex-str将颜色值转为#AARRGGBB格式
+@function rgb2hex($color) {
+    @return unquote('#' + #{string.slice(color.ie-hex-str($color), 4)});
+}
