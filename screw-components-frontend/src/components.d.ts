@@ -22,7 +22,9 @@ declare module '@vue/runtime-core' {
     ElMenuItemGroup: typeof import('element-plus/es')['ElMenuItemGroup']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
+    IEpAim: typeof import('~icons/ep/aim')['default']
     IEpSetting: typeof import('~icons/ep/setting')['default']
+    IEpWarning: typeof import('~icons/ep/warning')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

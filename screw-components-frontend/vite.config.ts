@@ -27,9 +27,6 @@ export default defineConfig(env => {
             }),
             defineOptions(), // 扩展defineOptions全局方法
             svgLoader(),
-            Icons({
-                autoInstall: true,
-            }),
             AutoImport({
                 dts: path.resolve(pathSrc, 'auto-imports.d.ts'),
                 resolvers: [
@@ -53,6 +50,9 @@ export default defineConfig(env => {
             }),
             viteCompression({
                 threshold: 100 * 1024, // 需要压缩的最小文件大小，这里是100K
+            }),
+            Icons({
+                autoInstall: true,
             }),
             progress(),
         ],
