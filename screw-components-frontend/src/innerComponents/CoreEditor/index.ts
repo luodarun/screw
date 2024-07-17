@@ -2,7 +2,7 @@ import type { App } from 'vue';
 import CoreEdit from './index.vue';
 
 CoreEdit.install = (app: App): void => {
-    app.component(CoreEdit.name, CoreEdit);
+    app.component('CoreEdit', CoreEdit);
 };
 
 export const CoreEditComponent = CoreEdit;

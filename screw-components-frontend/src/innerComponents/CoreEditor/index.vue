@@ -33,7 +33,8 @@ import SplitLine from './components/SplitLine/index.vue';
     .core-editor-content {
         display: flex;
         .left-content {
-
+            width: 200px;
+            background-color: red;
         }
         .middle-content {
             flex: 1;
