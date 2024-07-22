@@ -1,18 +1,14 @@
 <template>
-    <el-scrollbar>
-        <router-view v-slot="{ Component }">
-            <transition name="fade-transform" mode="out-in">
-                <component :is="Component" />
-            </transition>
-        </router-view>
-    </el-scrollbar>
+    <router-view v-slot="{ Component }">
+        <transition name="fade-transform" mode="out-in">
+            <component :is="Component" />
+        </transition>
+    </router-view>
 </template>
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import BasicHeader from './components/basicHeader.vue';
-import BasicSlider from './components/basicSlider.vue';
 
 const route = useRoute();
 
@@ -30,5 +26,4 @@ watch(
 );
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
