@@ -6,7 +6,7 @@ const demoRoutes: RouteRecordRaw[] = [
         name: 'demo1',
         meta: {
             title: 'demo1',
-            icon: import('~icons/ep/present'), // 只能这样引入啊
+            icon: 'ep:present'
         },
         component: () => import('@/pages/demo/demo1/index.vue'),
     },
@@ -15,7 +15,7 @@ const demoRoutes: RouteRecordRaw[] = [
         name: 'demo2',
         meta: {
             title: 'demo2',
-            icon: import('~icons/ep/ice-cream'), // 只能这样引入啊
+            icon: 'ep:ice-cream'
         },
         component: () => import('@/pages/demo/demo2/index.vue'),
     },

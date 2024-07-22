@@ -1,5 +1,8 @@
 export type ComponentScheme = {
     name: string;
+    icon?: string;
+    iconStyle?: Record<string, any>;
+    img?: string,
 };
 // 每个组件数据大概是这样
 // {

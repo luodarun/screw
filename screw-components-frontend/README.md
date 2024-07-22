@@ -7,6 +7,13 @@
 
 组件的icon如何加载？
 
+<!-- 图标库 -->
+https://icon-sets.iconify.design/
+
+iconify icon
+
+https://www.npmjs.com/package/@iconify/vue
+
 自己的可以用
 
 参考项目：

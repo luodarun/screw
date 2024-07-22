@@ -2,9 +2,7 @@ import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import svgLoader from 'vite-svg-loader';
-import Icons from 'unplugin-icons/vite';
 import mdPlugin, { Mode } from 'vite-plugin-markdown';
-import IconsResolver from 'unplugin-icons/resolver';
 import defineOptions from 'unplugin-vue-define-options/vite';
 import progress from 'vite-plugin-progress';
 import viteCompression from 'vite-plugin-compression';
@@ -31,28 +29,17 @@ export default defineConfig(env => {
                 dts: path.resolve(pathSrc, 'auto-imports.d.ts'),
                 resolvers: [
                     ElementPlusResolver(),
-                    // 自动导入图标组件
-                    IconsResolver({
-                        prefix: 'Icon',
-                    }),
                 ],
             }),
             Components({
                 dts: path.resolve(pathSrc, 'components.d.ts'),
                 dirs: [],
                 resolvers: [
-                    // 自动注册图标组件
-                    IconsResolver({
-                        enabledCollections: ['ep'],
-                    }),
                     ElementPlusResolver(),
                 ],
             }),
             viteCompression({
                 threshold: 100 * 1024, // 需要压缩的最小文件大小，这里是100K
-            }),
-            Icons({
-                autoInstall: true,
             }),
             progress(),
         ],

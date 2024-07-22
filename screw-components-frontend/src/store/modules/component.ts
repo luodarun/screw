@@ -4,12 +4,17 @@ export const useComponentStore = defineStore('componentStore', {
     state: () => ({
         list: [
             {
-                icon: 'i-ep-warning',
+                icon: "material-symbols-light:10mp",
                 name: '按钮',
+                iconStyle: {
+                    width: '24',
+                    height: '24',
+                    color: '#fff'
+                }
             },
             {
-                icon: 'i-ep-warning',
                 name: '图片',
+                img: 'https://cnc-nerve.17zuoye.cn/17xue-nerve/disk/test/ceee.jpg',
             }
         ], // 收录的组件，这些组件在使用之前必须要先在全局注册
     }),

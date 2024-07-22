@@ -8,7 +8,8 @@
         <component :is="IconEpApple"></component>
         111
         <MinCom text="1234"></MinCom> -->
-        <MinCom v-for="(item, index) in list" :key="index" :text="item.name"></MinCom>
+        <!-- {{ list }} -->
+        <MinCom v-for="(item, index) in list" :key="index" :info="item"></MinCom>
     </div>
 </template>
 <script setup lang="ts">
@@ -16,6 +17,7 @@
 import { storeToRefs } from "pinia";
 import MinCom from './miniCom';
 import { useComponentStore } from '@/store/modules/component';
+
 
 const componentStore = useComponentStore();
 const { list } = storeToRefs(componentStore);

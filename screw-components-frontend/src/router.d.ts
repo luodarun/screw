@@ -8,6 +8,6 @@ declare module 'vue-router' {
         hideInNav?: boolean; // 不在导航栏中显示（链接直接访问、其他按钮跳转，个人信息等）
         openNewPage?: boolean; // 新页面打开（自身链接、外部链接）
         requiresAuth?: boolean; // 需要登录认证
-        icon?: Promise<typeof import('~icons/*')>; // 菜单图标
+        icon?: string // 菜单icon
     }
 }
