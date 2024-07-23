@@ -14,6 +14,6 @@
     height: 64px;
     flex-shrink: 0;
     box-sizing: border-box;
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid var(--border-color);
 }
 </style>
