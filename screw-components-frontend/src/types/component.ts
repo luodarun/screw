@@ -2,7 +2,8 @@ export type ComponentScheme = {
     name: string;
     icon?: string;
     iconStyle?: Record<string, any>;
-    img?: string,
+    img?: string;
+    lastScale?: number;
 };
 // 每个组件数据大概是这样
 // {

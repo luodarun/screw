@@ -7,6 +7,10 @@
 
 组件的icon如何加载？
 
+git config --global http.proxy socks5://127.0.0.1:7897
+
+git config  --global  --unset http.proxy
+
 <!-- 图标库 -->
 https://icon-sets.iconify.design/
 
