@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { ComponentScheme } from '@/types/component';
+import type { ComponentScheme, CanvasStyleData } from '@/types/component';
 import { deepCopy } from '@/utils';
 
 export const useEditStore = defineStore('editStore', {
@@ -265,6 +265,19 @@ export const useEditStore = defineStore('editStore', {
         snapshotIndex: -1,
         isClickComponent: false,
         isInEdiotr: false,
+        curComponent: null as null | ComponentScheme,
+        curComponentIndex: null as null | number,
+        menuShow: false,
+        canvasStyleData: { // 页面全局数据
+            width: 1200,
+            height: 740,
+            scale: 100,
+            color: '#000',
+            opacity: 1,
+            background: '#fff',
+            fontSize: 14,
+        } as CanvasStyleData,
+        isDarkMode: false,
     }),
     getters: {
         
@@ -292,6 +305,13 @@ export const useEditStore = defineStore('editStore', {
         },
         setInEditorStatus(isInEdiotr: boolean) {
             this.isInEdiotr = isInEdiotr;
+        },
+        setCurComponent(params: {component: null | ComponentScheme, index: null | number}) {
+            this.curComponent = params.component;
+            this.curComponentIndex = params.index;
+        },
+        hideContextMenu() {
+            this.menuShow = false;
         },
     },
     // 稍后将由插件读取

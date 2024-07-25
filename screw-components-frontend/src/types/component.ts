@@ -1,10 +1,25 @@
 export type ComponentScheme = {
     name: string;
+    id: string;
     icon?: string;
     iconStyle?: Record<string, any>;
     img?: string;
     lastScale?: number;
 };
+export type Point = {
+    x: number;
+    y: number;
+};
+export type CommonStyle = { left: number; width: number; top: number; height: number; rotate: number; };
+export type CanvasStyleData = {
+    width: number;
+    height: number;
+    scale: number;
+    color: string;
+    opacity: number;
+    background: string;
+    fontSize: number;
+}
 // 每个组件数据大概是这样
 // {
 //     component: 'v-text', // 组件名称，需要提前注册到 Vue
