@@ -1,6 +1,7 @@
 export type ComponentScheme = {
     name: string;
     id: string;
+    component: string;
     icon?: string;
     iconStyle?: Record<string, any>;
     img?: string;
@@ -20,6 +21,9 @@ export type CanvasStyleData = {
     background: string;
     fontSize: number;
 }
+export type UsingComponent = ComponentScheme & {
+    style: CommonStyle;
+};
 // 每个组件数据大概是这样
 // {
 //     component: 'v-text', // 组件名称，需要提前注册到 Vue

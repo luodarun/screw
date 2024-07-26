@@ -32,9 +32,6 @@
                             :id="'component' + item.id"
                             class="component"
                             :style="getComponentStyle(item.style)"
-                            :prop-value="item.propValue"
-                            :element="item"
-                            :request="item.request"
                         />
                     </div>
                     <!-- <Shape
@@ -87,17 +84,17 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { nanoid } from 'nanoid';
 import { useEditStore } from '@/store/modules/edit';
 import { deepCopy } from '@/utils/index';
 import { changeComponentSizeWithScale } from './changeComponentsSizeWithScale';
-import { getCanvasStyle } from './style';
+import { getCanvasStyle, getStyle, svgFilterAttrs } from './style';
 import { changeStyleWithScale } from './translate';
 import Grid from './components/Grid.vue';
-import VButton from '@/baseComponents/VButton/index.vue';
-import VImage from '@/baseComponents/VImage/index.vue';
+import type { CommonStyle } from '@/types/component';
+
 
 // 这种可选组件应该基本分为两类，第一类是在当前项目中维护的基本组件，第二类是不在项目中维护的组件，但是应该可以通过引入的方式来解决，这种方式除了使用$mount来生成对应的dom，还有其他办法吗？
 
@@ -129,20 +126,27 @@ const {
 const isEdit = ref(true);
 
 const handleDrop = (e: DragEvent) => {
+    console.log('handleDrop');
     e.preventDefault();
     e.stopPropagation();
 
     const index = e.dataTransfer?.getData('index');
+    console.log('index :>> ', index);
     const rectInfo = editor.value?.getBoundingClientRect();
+    console.log('rectInfo :>> ', rectInfo);
     if (index && rectInfo) {
         const component = deepCopy(allComponentList.value[Number(index)]);
-        component.style.top = e.clientY - rectInfo.y;
-        component.style.left = e.clientX - rectInfo.x;
+        component.style = {
+            width: 200,
+            height: 10,
+            top: e.clientY - rectInfo.y,
+            left: e.clientX - rectInfo.x,
+        }
         component.id = nanoid();
 
         // 根据画面比例修改组件样式比例
         changeComponentSizeWithScale(component);
-
+        console.log('component :>> ', component);
         editStore.addComponent({ component });
         editStore.recordSnapshot();
     }
@@ -192,6 +196,14 @@ const handleContextMenu = (e: MouseEvent) => {
 
     // this.$store.commit('showContextMenu', { top, left })
 };
+
+const getComponentStyle = (style: CommonStyle) => {
+    return getStyle(style, svgFilterAttrs);
+};
+
+onMounted(() => {
+    editStore.editor = document.querySelector('#editor');
+});
 </script>
 <style lang="scss" scoped>
 .edit-panel {

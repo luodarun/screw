@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { ComponentScheme, CanvasStyleData } from '@/types/component';
+import type { ComponentScheme, CanvasStyleData, UsingComponent } from '@/types/component';
 import { deepCopy } from '@/utils';
 
 export const useEditStore = defineStore('editStore', {
@@ -8,258 +8,22 @@ export const useEditStore = defineStore('editStore', {
             {
                 icon: "material-symbols-light:10mp",
                 name: '按钮',
+                component: 'VButton',
                 iconStyle: {
                     width: '24',
                     height: '24',
-                    color: '#fff'
+                    color: 'red'
                 }
             },
             {
                 name: '图片',
+                component: 'VImage',
                 img: 'https://cnc-nerve.17zuoye.cn/17xue-nerve/disk/test/ceee.jpg',
             },
-            {
-                icon: "material-symbols-light:10mp",
-                name: '按钮',
-                iconStyle: {
-                    width: '24',
-                    height: '24',
-                    color: '#fff'
-                }
-            },
-            {
-                name: '图片',
-                img: 'https://cnc-nerve.17zuoye.cn/17xue-nerve/disk/test/ceee.jpg',
-            },
-            {
-                icon: "material-symbols-light:10mp",
-                name: '按钮',
-                iconStyle: {
-                    width: '24',
-                    height: '24',
-                    color: '#fff'
-                }
-            },
-            {
-                name: '图片',
-                img: 'https://cnc-nerve.17zuoye.cn/17xue-nerve/disk/test/ceee.jpg',
-            },
-            {
-                icon: "material-symbols-light:10mp",
-                name: '按钮',
-                iconStyle: {
-                    width: '24',
-                    height: '24',
-                    color: '#fff'
-                }
-            },
-            {
-                name: '图片',
-                img: 'https://cnc-nerve.17zuoye.cn/17xue-nerve/disk/test/ceee.jpg',
-            },
-            {
-                icon: "material-symbols-light:10mp",
-                name: '按钮',
-                iconStyle: {
-                    width: '24',
-                    height: '24',
-                    color: '#fff'
-                }
-            },
-            {
-                name: '图片',
-                img: 'https://cnc-nerve.17zuoye.cn/17xue-nerve/disk/test/ceee.jpg',
-            },
-            {
-                icon: "material-symbols-light:10mp",
-                name: '按钮',
-                iconStyle: {
-                    width: '24',
-                    height: '24',
-                    color: '#fff'
-                }
-            },
-            {
-                name: '图片',
-                img: 'https://cnc-nerve.17zuoye.cn/17xue-nerve/disk/test/ceee.jpg',
-            },
-            {
-                icon: "material-symbols-light:10mp",
-                name: '按钮',
-                iconStyle: {
-                    width: '24',
-                    height: '24',
-                    color: '#fff'
-                }
-            },
-            {
-                name: '图片',
-                img: 'https://cnc-nerve.17zuoye.cn/17xue-nerve/disk/test/ceee.jpg',
-            },
-            {
-                icon: "material-symbols-light:10mp",
-                name: '按钮',
-                iconStyle: {
-                    width: '24',
-                    height: '24',
-                    color: '#fff'
-                }
-            },
-            {
-                name: '图片',
-                img: 'https://cnc-nerve.17zuoye.cn/17xue-nerve/disk/test/ceee.jpg',
-            },
-            {
-                icon: "material-symbols-light:10mp",
-                name: '按钮',
-                iconStyle: {
-                    width: '24',
-                    height: '24',
-                    color: '#fff'
-                }
-            },
-            {
-                name: '图片',
-                img: 'https://cnc-nerve.17zuoye.cn/17xue-nerve/disk/test/ceee.jpg',
-            },
-            {
-                icon: "material-symbols-light:10mp",
-                name: '按钮',
-                iconStyle: {
-                    width: '24',
-                    height: '24',
-                    color: '#fff'
-                }
-            },
-            {
-                name: '图片',
-                img: 'https://cnc-nerve.17zuoye.cn/17xue-nerve/disk/test/ceee.jpg',
-            },
-
-
-            {
-                icon: "material-symbols-light:10mp",
-                name: '按钮',
-                iconStyle: {
-                    width: '24',
-                    height: '24',
-                    color: '#fff'
-                }
-            },
-            {
-                name: '图片',
-                img: 'https://cnc-nerve.17zuoye.cn/17xue-nerve/disk/test/ceee.jpg',
-            },
-            {
-                icon: "material-symbols-light:10mp",
-                name: '按钮',
-                iconStyle: {
-                    width: '24',
-                    height: '24',
-                    color: '#fff'
-                }
-            },
-            {
-                name: '图片',
-                img: 'https://cnc-nerve.17zuoye.cn/17xue-nerve/disk/test/ceee.jpg',
-            },
-            {
-                icon: "material-symbols-light:10mp",
-                name: '按钮',
-                iconStyle: {
-                    width: '24',
-                    height: '24',
-                    color: '#fff'
-                }
-            },
-            {
-                name: '图片',
-                img: 'https://cnc-nerve.17zuoye.cn/17xue-nerve/disk/test/ceee.jpg',
-            },
-
-            {
-                icon: "material-symbols-light:10mp",
-                name: '按钮',
-                iconStyle: {
-                    width: '24',
-                    height: '24',
-                    color: '#fff'
-                }
-            },
-            {
-                name: '图片',
-                img: 'https://cnc-nerve.17zuoye.cn/17xue-nerve/disk/test/ceee.jpg',
-            },
-
-            {
-                icon: "material-symbols-light:10mp",
-                name: '按钮',
-                iconStyle: {
-                    width: '24',
-                    height: '24',
-                    color: '#fff'
-                }
-            },
-            {
-                name: '图片',
-                img: 'https://cnc-nerve.17zuoye.cn/17xue-nerve/disk/test/ceee.jpg',
-            },
-            {
-                icon: "material-symbols-light:10mp",
-                name: '按钮',
-                iconStyle: {
-                    width: '24',
-                    height: '24',
-                    color: '#fff'
-                }
-            },
-            {
-                name: '图片',
-                img: 'https://cnc-nerve.17zuoye.cn/17xue-nerve/disk/test/ceee.jpg',
-            },
-            {
-                icon: "material-symbols-light:10mp",
-                name: '按钮',
-                iconStyle: {
-                    width: '24',
-                    height: '24',
-                    color: '#fff'
-                }
-            },
-            {
-                name: '图片',
-                img: 'https://cnc-nerve.17zuoye.cn/17xue-nerve/disk/test/ceee.jpg',
-            },
-            {
-                icon: "material-symbols-light:10mp",
-                name: '按钮',
-                iconStyle: {
-                    width: '24',
-                    height: '24',
-                    color: '#fff'
-                }
-            },
-            {
-                name: '图片',
-                img: 'https://cnc-nerve.17zuoye.cn/17xue-nerve/disk/test/ceee.jpg',
-            },
-            {
-                icon: "material-symbols-light:10mp",
-                name: '按钮',
-                iconStyle: {
-                    width: '24',
-                    height: '24',
-                    color: '#fff'
-                }
-            },
-            {
-                name: '图片',
-                img: 'https://cnc-nerve.17zuoye.cn/17xue-nerve/disk/test/ceee.jpg',
-            },
-        ], // 收录的组件，这些组件在使用之前必须要先在全局注册
+        ] as ComponentScheme[], // 收录的组件，这些组件在使用之前必须要先在全局注册
         showLeft: false,
         editor: null as null | HTMLElement,
-        usingComponents: [] as ComponentScheme[],
+        usingComponents: [] as UsingComponent[],
         lastScale: 100, // 记录快照上次的缩放比例，用于判断是否需要更新快照
         snapshotData: [] as Array<ComponentScheme[]>,
         snapshotIndex: -1,

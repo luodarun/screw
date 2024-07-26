@@ -1,5 +1,6 @@
 <template>
-  <div style="overflow: hidden">
+  <div>
+      v-image
       <img :src="propValue">
   </div>
 </template>

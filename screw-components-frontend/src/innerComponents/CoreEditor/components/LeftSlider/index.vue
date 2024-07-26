@@ -7,6 +7,7 @@
                     :key="index"
                     :info="item"
                     :data-index="index"
+                    draggable="true"
                 ></MinCom>
             </div>
         </el-scrollbar>
@@ -45,8 +46,10 @@ const handleDragStart = (e: DragEvent) => {
     .min-com-wrapper {
         display: flex;
         align-items: flex-start;
+        justify-content: space-between;
         flex-wrap: wrap;
         box-sizing: border-box;
+        padding: 12px;
     }
     .control-btn {
         position: absolute;
