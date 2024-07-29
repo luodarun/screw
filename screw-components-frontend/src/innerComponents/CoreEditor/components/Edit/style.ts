@@ -13,6 +13,19 @@ export function getCanvasStyle(canvasStyleData: Record<string, any>) {
     return result
 }
 
+export function getShapeStyle(style: Record<string, any>) {
+    const result: any = {};
+    ['width', 'height', 'top', 'left', 'rotate'].forEach(attr => {
+        if (attr != 'rotate') {
+            result[attr] = style[attr] + 'px'
+        } else {
+            result.transform = 'rotate(' + style[attr] + 'deg)'
+        }
+    })
+
+    return result
+}
+
 export const needUnit: string[] = [
     'fontSize',
     'width',

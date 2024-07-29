@@ -5,13 +5,18 @@ export type ComponentScheme = {
     icon?: string;
     iconStyle?: Record<string, any>;
     img?: string;
+
+
     lastScale?: number;
+    propValue?: any;
+    animations: Animation[];
+    isLock?: boolean;
 };
 export type Point = {
     x: number;
     y: number;
 };
-export type CommonStyle = { left: number; width: number; top: number; height: number; rotate: number; };
+export type CommonStyle = { left: number; width: number; top: number; height: number; rotate: number; padding: number; };
 export type CanvasStyleData = {
     width: number;
     height: number;
@@ -23,6 +28,12 @@ export type CanvasStyleData = {
 }
 export type UsingComponent = ComponentScheme & {
     style: CommonStyle;
+};
+
+export type Animation = {
+    animationTime: number;
+    value: string;
+    isLoop: boolean;
 };
 // 每个组件数据大概是这样
 // {

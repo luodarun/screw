@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { ComponentScheme, CanvasStyleData, UsingComponent } from '@/types/component';
+import type { ComponentScheme, CanvasStyleData, UsingComponent, CommonStyle } from '@/types/component';
 import { deepCopy } from '@/utils';
 
 export const useEditStore = defineStore('editStore', {
@@ -22,6 +22,7 @@ export const useEditStore = defineStore('editStore', {
             },
         ] as ComponentScheme[], // 收录的组件，这些组件在使用之前必须要先在全局注册
         showLeft: false,
+        showRight: false,
         editor: null as null | HTMLElement,
         usingComponents: [] as UsingComponent[],
         lastScale: 100, // 记录快照上次的缩放比例，用于判断是否需要更新快照
@@ -29,7 +30,7 @@ export const useEditStore = defineStore('editStore', {
         snapshotIndex: -1,
         isClickComponent: false,
         isInEdiotr: false,
-        curComponent: null as null | ComponentScheme,
+        curComponent: null as null | UsingComponent,
         curComponentIndex: null as null | number,
         menuShow: false,
         canvasStyleData: { // 页面全局数据
@@ -70,12 +71,23 @@ export const useEditStore = defineStore('editStore', {
         setInEditorStatus(isInEdiotr: boolean) {
             this.isInEdiotr = isInEdiotr;
         },
-        setCurComponent(params: {component: null | ComponentScheme, index: null | number}) {
+        setCurComponent(params: {component: null | UsingComponent, index: null | number}) {
             this.curComponent = params.component;
             this.curComponentIndex = params.index;
         },
         hideContextMenu() {
             this.menuShow = false;
+        },
+        setShapeStyle({ top, left, width, height, rotate, padding }: CommonStyle) {
+            if (!this.curComponent) {
+                return;
+            }
+            if (top !== undefined) this.curComponent.style.top = Math.round(top)
+            if (left !== undefined) this.curComponent.style.left = Math.round(left)
+            if (width) this.curComponent.style.width = Math.round(width)
+            if (padding) this.curComponent.style.padding = Math.round(padding)
+            if (height) this.curComponent.style.height = Math.round(height)
+            if (rotate) this.curComponent.style.rotate = Math.round(rotate)
         },
     },
     // 稍后将由插件读取
