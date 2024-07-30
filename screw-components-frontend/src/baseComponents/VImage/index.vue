@@ -1,6 +1,5 @@
 <template>
   <div>
-      v-image
       <img :src="propValue">
   </div>
 </template>

@@ -1,5 +1,6 @@
 <template>
     <div class="edit-panel">
+        <MyComponent></MyComponent>
         <el-scrollbar height="100%">
             <div
                 class="content"
@@ -25,17 +26,8 @@
                     <!-- 网格线 -->
                     <Grid :is-dark-mode="isDarkMode" />
                     <!--页面组件列表展示-->
-                    <div v-for="(item, index) in usingComponents"
-                    :key="item.id">
-                        <component
-                            :is="item.component"
-                            :id="'component' + item.id"
-                            class="component"
-                            :style="getComponentStyle(item.style)"
-                        />
-                    </div>
-                    <!-- <Shape
-                        v-for="(item, index) in componentData"
+                    <Shape
+                        v-for="(item, index) in usingComponents"
                         :key="item.id"
                         :default-style="item.style"
                         :style="getShapeStyle(item.style)"
@@ -46,70 +38,38 @@
                     >
                         <component
                             :is="item.component"
-                            v-if="item.component.startsWith('SVG')"
-                            :id="'component' + item.id"
-                            :style="getSVGStyle(item.style)"
-                            class="component"
-                            :prop-value="item.propValue"
-                            :element="item"
-                            :request="item.request"
-                        />
-
-                        <component
-                            :is="item.component"
-                            v-else-if="item.component != 'VText'"
                             :id="'component' + item.id"
                             class="component"
                             :style="getComponentStyle(item.style)"
                             :prop-value="item.propValue"
                             :element="item"
-                            :request="item.request"
                         />
-
-                        <component
-                            :is="item.component"
-                            v-else
-                            :id="'component' + item.id"
-                            class="component"
-                            :style="getComponentStyle(item.style)"
-                            :prop-value="item.propValue"
-                            :element="item"
-                            :request="item.request"
-                            @input="handleInput"
-                        />
-                    </Shape> -->
+                    </Shape>
                 </div>
             </div>
         </el-scrollbar>
     </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, resolveComponent, defineAsyncComponent } from 'vue';
 import { storeToRefs } from 'pinia';
 import { nanoid } from 'nanoid';
 import { useEditStore } from '@/store/modules/edit';
 import { deepCopy } from '@/utils/index';
 import { changeComponentSizeWithScale } from './changeComponentsSizeWithScale';
-import { getCanvasStyle, getStyle, svgFilterAttrs } from './style';
+import { getCanvasStyle, getStyle, svgFilterAttrs, getShapeStyle } from './style';
 import { changeStyleWithScale } from './translate';
 import Grid from './components/Grid.vue';
+import Shape from './components/Shape.vue';
 import type { CommonStyle } from '@/types/component';
 
+const ButtonCounter = resolveComponent('VButton')
+console.log('ButtonCounter :>> ', ButtonCounter);
 
 // 这种可选组件应该基本分为两类，第一类是在当前项目中维护的基本组件，第二类是不在项目中维护的组件，但是应该可以通过引入的方式来解决，这种方式除了使用$mount来生成对应的dom，还有其他办法吗？
 
 // 参考这种风格
 // import { defineAsyncComponent } from 'vue'
-
-// const AsyncComp = defineAsyncComponent(() => {
-//   return new Promise((resolve, reject) => {
-//     // ...从服务器获取组件
-//     resolve(/* 获取到的组件 */)
-//   })
-// })
-// app.component('MyComponent', defineAsyncComponent(() =>
-//   import('./components/MyComponent.vue')
-// ))
 
 // 如何对接一个组件库？只能使用cdn文件引入的方式解决，但是打包的时候可以考虑使用npm+按需引入的方式做优化，但是目前应该不会用到
 
@@ -121,6 +81,7 @@ const {
     canvasStyleData,
     isDarkMode,
     usingComponents,
+    curComponent,
 } = storeToRefs(editStore);
 
 const isEdit = ref(true);

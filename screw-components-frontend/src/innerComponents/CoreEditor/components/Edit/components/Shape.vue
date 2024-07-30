@@ -192,7 +192,7 @@ const getPointStyle = (point: string) => {
 };
 
 const getCursor = () => {
-    const rotate = curComponent.value
+    const rotate = curComponent.value?.style?.rotate
         ? mod360(curComponent.value.style.rotate)
         : 0; // 取余 360
     const result: Record<string, string> = {};
