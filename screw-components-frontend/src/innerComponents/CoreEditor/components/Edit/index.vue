@@ -1,6 +1,7 @@
 <template>
     <div class="edit-panel">
         <MyComponent></MyComponent>
+        <RIButtonFuck>111</RIButtonFuck>
         <el-scrollbar height="100%">
             <div
                 class="content"
@@ -51,7 +52,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, resolveComponent, defineAsyncComponent } from 'vue';
+import { ref, onMounted, resolveComponent } from 'vue';
 import { storeToRefs } from 'pinia';
 import { nanoid } from 'nanoid';
 import { useEditStore } from '@/store/modules/edit';
@@ -63,10 +64,12 @@ import Grid from './components/Grid.vue';
 import Shape from './components/Shape.vue';
 import type { CommonStyle } from '@/types/component';
 
-const ButtonCounter = resolveComponent('VButton')
+
+const ButtonCounter = resolveComponent('ElButton')
 console.log('ButtonCounter :>> ', ButtonCounter);
 
 // 这种可选组件应该基本分为两类，第一类是在当前项目中维护的基本组件，第二类是不在项目中维护的组件，但是应该可以通过引入的方式来解决，这种方式除了使用$mount来生成对应的dom，还有其他办法吗？
+// 如何通过validator获取到符合要求的数据？validator里面也不只是单纯的啊！应该分两套，一套是基本的属性设置，string就是string，一套是组件提供的，组件提供的优先级高于基本的
 
 // 参考这种风格
 // import { defineAsyncComponent } from 'vue'
