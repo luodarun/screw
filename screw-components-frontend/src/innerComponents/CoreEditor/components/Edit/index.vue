@@ -1,7 +1,6 @@
 <template>
     <div class="edit-panel">
-        <MyComponent></MyComponent>
-        <RIButtonFuck>111</RIButtonFuck>
+        <!-- <component :is="'element-plus/es/components/button/index'">111</component> -->
         <el-scrollbar height="100%">
             <div
                 class="content"
@@ -52,7 +51,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, resolveComponent } from 'vue';
+import { ref, onMounted, resolveComponent, defineAsyncComponent } from 'vue';
 import { storeToRefs } from 'pinia';
 import { nanoid } from 'nanoid';
 import { useEditStore } from '@/store/modules/edit';
@@ -65,16 +64,25 @@ import Shape from './components/Shape.vue';
 import type { CommonStyle } from '@/types/component';
 
 
-const ButtonCounter = resolveComponent('ElButton')
-console.log('ButtonCounter :>> ', ButtonCounter);
-
 // 这种可选组件应该基本分为两类，第一类是在当前项目中维护的基本组件，第二类是不在项目中维护的组件，但是应该可以通过引入的方式来解决，这种方式除了使用$mount来生成对应的dom，还有其他办法吗？
 // 如何通过validator获取到符合要求的数据？validator里面也不只是单纯的啊！应该分两套，一套是基本的属性设置，string就是string，一套是组件提供的，组件提供的优先级高于基本的
 
 // 参考这种风格
 // import { defineAsyncComponent } from 'vue'
 
-// 如何对接一个组件库？只能使用cdn文件引入的方式解决，但是打包的时候可以考虑使用npm+按需引入的方式做优化，但是目前应该不会用到
+// 如何对接一个组件库？只能使用cdn文件引入的方式解决，但是打包的时候可以考虑使用npm+按需引入的方式做优化，但是目前应该不会用到,我们应该先只对接vue3版本的组件！
+
+// app.component('MyComponent', defineAsyncComponent(async () => {
+//     const bb = await import('v-image');
+//     console.log('bb.VImage :>> ', bb.VImage);
+//     return bb.VImage;
+// }))
+// app.component('ElButton', defineAsyncComponent(async () => {
+//     // const ElButtonFuck = await import('element-plus/lib/components/button/index.js');
+//     const RIButtonFuck = await import('element-plus/es/components/button/index');
+//     console.log('RIButtonFuck :>> ', RIButtonFuck);
+//     return RIButtonFuck;
+// }))
 
 const editStore = useEditStore();
 const {

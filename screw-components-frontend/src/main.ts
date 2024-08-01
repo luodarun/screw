@@ -12,17 +12,4 @@ import 'element-plus/es/components/button/index';
 
 const app = createApp(App);
 registerComponents(app);
-
-app.component('MyComponent', defineAsyncComponent(async () => {
-    const bb = await import('v-image');
-    console.log('bb.VImage :>> ', bb.VImage);
-    return bb.VImage;
-}))
-app.component('RIButtonFuck', defineAsyncComponent(async () => {
-    // const ElButtonFuck = await import('element-plus/lib/components/button/index.js');
-    const RIButtonFuck = await import('element-plus/es/components/button/index');
-    console.log('RIButtonFuck :>> ', RIButtonFuck);
-    return RIButtonFuck;
-}))
-
 app.use(store).use(router).mount('#app');
