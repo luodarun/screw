@@ -1,6 +1,5 @@
 <template>
     <div class="edit-panel">
-        <!-- <component :is="'element-plus/es/components/button/index'">111</component> -->
         <el-scrollbar height="100%">
             <div
                 class="content"
@@ -36,14 +35,16 @@
                         :index="index"
                         :class="{ lock: item.isLock }"
                     >
+                    {{ item.componentProps }}
                         <component
-                            :is="item.component"
+                            :is="item.componentInstance"
                             :id="'component' + item.id"
                             class="component"
                             :style="getComponentStyle(item.style)"
-                            :prop-value="item.propValue"
-                            :element="item"
+                            v-bind="item.componentProps"
                         />
+                        <!-- :prop-value="item.propValue"
+                            :element="item" -->
                     </Shape>
                 </div>
             </div>
@@ -51,7 +52,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, resolveComponent, defineAsyncComponent } from 'vue';
+import { ref, onMounted, resolveComponent, defineAsyncComponent, shallowRef, markRaw } from 'vue';
 import { storeToRefs } from 'pinia';
 import { nanoid } from 'nanoid';
 import { useEditStore } from '@/store/modules/edit';
@@ -85,9 +86,6 @@ import UniBadge from '@dcloudio/uni-ui/lib/uni-badge/uni-badge.vue';
 //     return RIButtonFuck;
 // }))
 
-const ButtonCounter2 = resolveComponent('ElButton')
-console.log('ButtonCounter2 :>> ', ButtonCounter2);
-
 const editStore = useEditStore();
 const {
     editor,
@@ -119,9 +117,12 @@ const handleDrop = (e: DragEvent) => {
             left: e.clientX - rectInfo.x,
         }
         component.id = nanoid();
-        const ButtonCounter = resolveComponent('ElButton')
-        console.log('ButtonCounter :>> ', ButtonCounter);
-        component.component = ButtonCounter;
+        const ButtonCounter = defineAsyncComponent(async () => {
+            const RIButtonFuck = await import('element-plus/es/components/button/index');
+            console.log('RIButtonFuck :>> ', RIButtonFuck);
+            return RIButtonFuck;
+        });
+        component.componentInstance = markRaw(ButtonCounter);
 
         // 根据画面比例修改组件样式比例
         changeComponentSizeWithScale(component);
