@@ -35,7 +35,6 @@
                         :index="index"
                         :class="{ lock: item.isLock }"
                     >
-                    {{ item.componentProps }}
                         <component
                             :is="item.componentInstance"
                             :id="'component' + item.id"
@@ -111,16 +110,34 @@ const handleDrop = (e: DragEvent) => {
     if (index && rectInfo) {
         const component = deepCopy(allComponentList.value[Number(index)]);
         component.style = {
-            width: 200,
-            height: 10,
+            // width: 200,
+            // height: 10,
             top: e.clientY - rectInfo.y,
             left: e.clientX - rectInfo.x,
         }
         component.id = nanoid();
         const ButtonCounter = defineAsyncComponent(async () => {
-            const RIButtonFuck = await import('element-plus/es/components/button/index');
-            console.log('RIButtonFuck :>> ', RIButtonFuck);
-            return RIButtonFuck;
+            const { default: CurrentCom } = (await import('element-plus/es/components/button/index'));
+            // 解析组件所要参数
+            console.log('props :>> ', CurrentCom);
+            const params = [];
+            for (const key in CurrentCom.props) {
+                const keyInfo = {key};
+                const val = CurrentCom['props'][key];
+                if (val instanceof Function) {
+                    keyInfo.type = val.name;
+                } else if (val instanceof Object) {
+                    if (val.type instanceof Function) {
+                        keyInfo.type = val.type.name;
+                    } else if (val.type instanceof Array) {
+                        keyInfo.type = val.type.map(item => item.name);
+                    }
+                }
+                params.push(keyInfo);
+            }
+            console.log('params :>> ', params);
+            component.propsAttrs = params;
+            return CurrentCom;
         });
         component.componentInstance = markRaw(ButtonCounter);
 

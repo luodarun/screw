@@ -410,7 +410,6 @@ onMounted(() => {
 <style lang="scss" scoped>
 .shape {
     position: absolute;
-
     &:hover {
         cursor: move;
     }

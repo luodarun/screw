@@ -1,6 +1,17 @@
 <template>
-    <div class="right-slider">
-        <el-button @click="test">测试</el-button>
+    <div class="right-slider" v-if="curComponent">
+        <template v-for="(item, index) in curComponent.propsAttrs">
+            <div v-if="item.type === 'String'">
+                {{item.key}}: <el-input v-model="curComponent.componentProps[item.key]"></el-input>
+            </div>
+            <div v-else-if="item.type === 'Boolean'">
+                {{item.key}}: <el-radio-group v-model="curComponent.componentProps[item.key]">
+                                <el-radio :value="true">是</el-radio>
+                                <el-radio :value="false">否</el-radio>
+                            </el-radio-group>
+            </div>
+            <div v-else>{{item.key}}: 算了</div>
+        </template>
     </div>
 </template>
 <script setup lang="ts">
