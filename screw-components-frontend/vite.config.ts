@@ -81,7 +81,10 @@ export default defineConfig(env => {
         //     },
         // },
         build: {
-            target: [ 'es2020' ]
+            target: [ 'es2020' ],
+            rollupOptions: {
+                external: ['uni-ui-types']
+            }
         },
         optimizeDeps: {
             esbuildOptions: {

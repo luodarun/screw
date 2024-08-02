@@ -62,6 +62,7 @@ import { changeStyleWithScale } from './translate';
 import Grid from './components/Grid.vue';
 import Shape from './components/Shape.vue';
 import type { CommonStyle } from '@/types/component';
+import UniBadge from '@dcloudio/uni-ui/lib/uni-badge/uni-badge.vue';
 
 
 // 这种可选组件应该基本分为两类，第一类是在当前项目中维护的基本组件，第二类是不在项目中维护的组件，但是应该可以通过引入的方式来解决，这种方式除了使用$mount来生成对应的dom，还有其他办法吗？
@@ -83,6 +84,9 @@ import type { CommonStyle } from '@/types/component';
 //     console.log('RIButtonFuck :>> ', RIButtonFuck);
 //     return RIButtonFuck;
 // }))
+
+const ButtonCounter2 = resolveComponent('ElButton')
+console.log('ButtonCounter2 :>> ', ButtonCounter2);
 
 const editStore = useEditStore();
 const {
@@ -115,6 +119,9 @@ const handleDrop = (e: DragEvent) => {
             left: e.clientX - rectInfo.x,
         }
         component.id = nanoid();
+        const ButtonCounter = resolveComponent('ElButton')
+        console.log('ButtonCounter :>> ', ButtonCounter);
+        component.component = ButtonCounter;
 
         // 根据画面比例修改组件样式比例
         changeComponentSizeWithScale(component);

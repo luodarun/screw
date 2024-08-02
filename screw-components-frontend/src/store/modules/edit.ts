@@ -8,7 +8,7 @@ export const useEditStore = defineStore('editStore', {
             {
                 icon: "material-symbols-light:10mp",
                 name: '按钮',
-                component: import('element-plus/es/components/button/index').default,
+                component: 'ElButton',
                 iconStyle: {
                     width: '24',
                     height: '24',
