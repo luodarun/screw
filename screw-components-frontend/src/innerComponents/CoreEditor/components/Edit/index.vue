@@ -41,7 +41,16 @@
                             class="component"
                             :style="getComponentStyle(item.style)"
                             v-bind="item.componentProps"
-                        />
+                        >
+                            <template v-for="(slotItem, index2) in item.slots" v-slot:[slotItem.name]="slotProps">
+                                <!-- 如何即时更改此处效果？其实一般人根本到不了这里 -->
+                                <template v-if="slotItem.type === 'text'">
+                                    {{ slotItem.value || slotItem.default }}
+                                </template>
+                                <!-- 是不是又需要一层shape？ -->
+                                <component v-else :is="slotItem.value || slotItem.default" v-bind="Object.assign({}, slotProps, slotItem.slotProps)"></component>
+                            </template>
+                        </component>
                         <!-- :prop-value="item.propValue"
                             :element="item" -->
                     </Shape>

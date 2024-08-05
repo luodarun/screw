@@ -16,7 +16,19 @@ export const useEditStore = defineStore('editStore', {
                 },
                 componentProps: {
                     
-                }
+                },
+                allSlot: ['default', 'loading', 'icon'],
+                slots: [
+                    {
+                        name: 'default',
+                        type: 'text',
+                        default: 'default',
+                        slotProps: {
+                    
+                        },
+                        value: '',
+                    }
+                ]
             },
             {
                 name: '图片',

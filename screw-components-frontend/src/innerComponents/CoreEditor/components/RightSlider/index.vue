@@ -12,6 +12,8 @@
             </div>
             <div v-else>{{item.key}}: 算了</div>
         </template>
+        <div>slot</div>
+        <div>default: <input type="text"></div>
     </div>
 </template>
 <script setup lang="ts">
