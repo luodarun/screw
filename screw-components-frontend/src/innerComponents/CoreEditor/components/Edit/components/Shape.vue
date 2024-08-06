@@ -6,11 +6,7 @@
         @click="selectCurComponent"
         @mousedown="handleMouseDownOnShape"
     >
-        <span
-            v-show="isActive()"
-            class="iconfont icon-xiangyouxuanzhuan"
-            @mousedown="handleRotate"
-        ></span>
+        <el-icon v-show="isActive()" class="rotate-icon" @mousedown="handleRotate"><RefreshRight /></el-icon>
         <span v-show="element.isLock" class="iconfont icon-suo"></span>
         <div
             v-for="item in isActive() ? getPointList() : []"
@@ -27,6 +23,7 @@
 import { storeToRefs } from 'pinia';
 import { onMounted, ref, nextTick } from 'vue';
 import type { PropType } from 'vue';
+import { RefreshRight } from '@element-plus/icons-vue';
 import { useEditStore } from '@/store/modules/edit';
 import eventBus from '../eventBus';
 import runAnimation from '../runAnimation';
@@ -353,7 +350,7 @@ const handleMouseDownOnPoint = (point: HandleDirection, e: MouseEvent) => {
             x: moveEvent.clientX - Math.round(editorRectInfo.left),
             y: moveEvent.clientY - Math.round(editorRectInfo.top),
         };
-
+        console.log('curPositon :>> ', curPositon);
         calculateComponentPositionAndSize(
             point,
             style,
@@ -366,6 +363,7 @@ const handleMouseDownOnPoint = (point: HandleDirection, e: MouseEvent) => {
                 symmetricPoint,
             }
         );
+        console.log('style :>> ', style);
         editStore.setShapeStyle(style);
     };
 
@@ -430,7 +428,7 @@ onMounted(() => {
     z-index: 1;
 }
 
-.icon-xiangyouxuanzhuan {
+.rotate-icon {
     position: absolute;
     top: -34px;
     left: 50%;

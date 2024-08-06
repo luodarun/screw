@@ -55,7 +55,7 @@ function calculateRightTop(style: { rotate: number; width: number; height: numbe
     let newCenterPoint = getCenterPoint(curPositon, symmetricPoint)
     let newTopRightPoint = calculateRotatedPointCoordinate(curPositon, newCenterPoint, -style.rotate)
     let newBottomLeftPoint = calculateRotatedPointCoordinate(symmetricPoint, newCenterPoint, -style.rotate)
-  
+    console.log('newTopRightPoint :>> ', newTopRightPoint, 'newBottomLeftPoint :>> ', newBottomLeftPoint);
     let newWidth = newTopRightPoint.x - newBottomLeftPoint.x
     let newHeight = newBottomLeftPoint.y - newTopRightPoint.y
 
@@ -76,7 +76,7 @@ function calculateRightTop(style: { rotate: number; width: number; height: numbe
         newWidth = newTopRightPoint.x - newBottomLeftPoint.x
         newHeight = newBottomLeftPoint.y - newTopRightPoint.y
     }
-    
+    console.log('newWidth :>> ', newWidth, 'newHeight :>>', newHeight);
     if (newWidth > 0 && newHeight > 0) {
         style.width = Math.round(newWidth)
         style.height = Math.round(newHeight)

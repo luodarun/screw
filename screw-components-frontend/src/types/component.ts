@@ -1,12 +1,14 @@
-export type ComponentScheme = {
+export type ComponentStaticScheme = {
     name: string;
-    id: string;
     component: string;
     icon?: string;
     iconStyle?: Record<string, any>;
     img?: string;
-
-
+};
+export type ComponentPlatformScheme = {
+    id: string;
+};
+export type ComponentScheme = ComponentStaticScheme & {
     lastScale?: number;
     propValue?: any;
     animations: Animation[];

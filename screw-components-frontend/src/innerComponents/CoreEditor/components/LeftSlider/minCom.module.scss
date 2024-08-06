@@ -9,6 +9,7 @@
     padding: 12px;
     border: 1px solid var(--border-color);
     cursor: grab;
+    margin-bottom: 12px;
     &:active {
         cursor: grabbing;
     }
