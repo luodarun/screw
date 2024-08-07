@@ -30,7 +30,7 @@ import runAnimation from '../runAnimation';
 import calculateComponentPositionAndSize from '../calculateComponentPositionAndSize';
 import { mod360 } from '../translate';
 import { isPreventDrop } from '../utils';
-import type { UsingComponent, CommonStyle } from '@/types/component';
+import type { ComponentScheme, CommonStyle } from '@/types/component';
 import type { HandleDirection } from '../calculateComponentPositionAndSize';
 
 const editStore = useEditStore();
@@ -43,7 +43,7 @@ const props = defineProps({
     },
     element: {
         required: true,
-        type: Object as PropType<UsingComponent>,
+        type: Object as PropType<ComponentScheme>,
         default: () => {},
     },
     defaultStyle: {

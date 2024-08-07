@@ -1,9 +1,8 @@
 import { defineStore } from 'pinia';
 import type {
     ComponentStaticScheme,
-    ComponentScheme,
     CanvasStyleData,
-    UsingComponent,
+    ComponentScheme,
     CommonStyle,
 } from '@/types/component';
 import { deepCopy } from '@/utils';
@@ -15,9 +14,11 @@ export const useEditStore = defineStore('editStore', {
                 lib: 'element-plus',
                 components: [
                     {
-                        icon: 'material-symbols-light:10mp',
+                        icon: 'icon-park:arithmetic-buttons',
                         name: '按钮',
+                        libName: 'element-plus',
                         component: 'ElButton',
+                        configUrl: '@/AsyncComponent/ElementPlus/button',
                         iconStyle: {
                             width: '24',
                             height: '24',
@@ -26,7 +27,7 @@ export const useEditStore = defineStore('editStore', {
 
 
 
-                        // componentProps: {},
+                        // propValue: {},
                         // allSlot: ['default', 'loading', 'icon'],
                         // slots: [
                         //     {
@@ -41,26 +42,38 @@ export const useEditStore = defineStore('editStore', {
                     {
                         icon: 'icon-park:add-text',
                         name: '文字',
-                        component: 'VText',
+                        libName: 'element-plus',
+                        component: 'ElText',
+                        configUrl: '@/AsyncComponent/ElementPlus/text',
                         iconStyle: {
                             width: '24',
                             height: '24',
                             color: 'red',
                         },
                     },
+                    // {
+                    //     icon: 'icon-park:add-text',
+                    //     name: '图片',
+                    //     component: 'ElImage',
+                    //     iconStyle: {
+                    //         width: '24',
+                    //         height: '24',
+                    //         color: 'red',
+                    //     },
+                    // },
                 ],
             },
         ] as Array<{lib: string, components: ComponentStaticScheme[]}>, // 收录的组件，这些组件在使用之前必须要先在全局注册
         showLeft: false,
         showRight: false,
         editor: null as null | HTMLElement,
-        usingComponents: [] as UsingComponent[],
+        usingComponents: [] as ComponentScheme[],
         lastScale: 100, // 记录快照上次的缩放比例，用于判断是否需要更新快照
         snapshotData: [] as Array<ComponentScheme[]>,
         snapshotIndex: -1,
         isClickComponent: false,
         isInEdiotr: false,
-        curComponent: null as null | UsingComponent,
+        curComponent: null as null | ComponentScheme,
         curComponentIndex: null as null | number,
         menuShow: false,
         canvasStyleData: {
@@ -106,7 +119,7 @@ export const useEditStore = defineStore('editStore', {
             this.isInEdiotr = isInEdiotr;
         },
         setCurComponent(params: {
-            component: null | UsingComponent;
+            component: null | ComponentScheme;
             index: null | number;
         }) {
             this.curComponent = params.component;

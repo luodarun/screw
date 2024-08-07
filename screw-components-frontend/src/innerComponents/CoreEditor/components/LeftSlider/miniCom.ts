@@ -1,13 +1,13 @@
 import { h, ref, defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import type { ComponentScheme } from '../../../../types/component';
+import type { ComponentStaticScheme } from '../../../../types/component';
 import { Icon } from '@iconify/vue';
 import styles from './minCom.module.scss';
 
 export default defineComponent({
     props: {
         info: {
-            type: Object as PropType<ComponentScheme>,
+            type: Object as PropType<ComponentStaticScheme>,
         },
     },
     setup(props) {

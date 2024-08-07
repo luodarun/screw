@@ -40,7 +40,7 @@
                             :id="'component' + item.id"
                             class="component"
                             :style="getComponentStyle(item.style)"
-                            v-bind="item.componentProps"
+                            v-bind="item.propValue"
                         >
                             <template
                                 v-for="(slotItem, index2) in item.slots"
@@ -73,9 +73,10 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, defineAsyncComponent, markRaw } from 'vue';
+import { ref, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { nanoid } from 'nanoid';
+import { ElLoading } from 'element-plus'
 import { useEditStore } from '@/store/modules/edit';
 import { deepCopy } from '@/utils/index';
 import { changeComponentSizeWithScale } from './changeComponentsSizeWithScale';
@@ -89,6 +90,7 @@ import { changeStyleWithScale } from './translate';
 import Grid from './components/Grid.vue';
 import Shape from './components/Shape.vue';
 import type { CommonStyle } from '@/types/component';
+import loadAsyncComponent from './loadAsyncComponent';
 import UniBadge from '@dcloudio/uni-ui/lib/uni-badge/uni-badge.vue';
 
 // 这种可选组件应该基本分为两类，第一类是在当前项目中维护的基本组件，第二类是不在项目中维护的组件，但是应该可以通过引入的方式来解决，这种方式除了使用$mount来生成对应的dom，还有其他办法吗？
@@ -124,17 +126,17 @@ const {
 
 const isEdit = ref(true);
 
-const handleDrop = (e: DragEvent) => {
+const handleDrop = async (e: DragEvent) => {
     console.log('handleDrop');
+    const loadingInstance = ElLoading.service({ fullscreen: true })
     e.preventDefault();
     e.stopPropagation();
 
     const index = e.dataTransfer?.getData('index');
-    console.log('index :>> ', index);
+    const index2 = e.dataTransfer?.getData('index2');
     const rectInfo = editor.value?.getBoundingClientRect();
-    console.log('rectInfo :>> ', rectInfo);
-    if (index && rectInfo) {
-        const component = deepCopy(allComponentList.value[Number(index)]);
+    if (index && index2 && rectInfo) {
+        const component = deepCopy(allComponentList.value[Number(index)]['components'][Number(index2)]);
         component.style = {
             width: 200,
             height: 50,
@@ -143,169 +145,8 @@ const handleDrop = (e: DragEvent) => {
             left: e.clientX - rectInfo.x,
         };
         component.id = nanoid();
-        const ButtonCounter = defineAsyncComponent(async () => {
-            const { default: CurrentCom } = await import(
-                'element-plus/es/components/button/index'
-            );
-            // 解析组件所要参数
-            console.log('props :>> ', CurrentCom);
-            const params = [];
-            for (const key in CurrentCom.props) {
-                const keyInfo = { key };
-                const val = CurrentCom['props'][key];
-                if (val instanceof Function) {
-                    keyInfo.type = val.name;
-                } else if (val instanceof Object) {
-                    if (val.type instanceof Function) {
-                        keyInfo.type = val.type.name;
-                    } else if (val.type instanceof Array) {
-                        keyInfo.type = val.type.map(item => item.name);
-                    }
-                }
-                params.push(keyInfo);
-            }
-            console.log('params :>> ', params);
-            component.supportCss = [
-                {
-                    key: 'fontSize',
-                    defaultValue: '14',
-                },
-            ];
-            component.propsAttrs = [
-                {
-                    key: 'size',
-                    desc: '尺寸',
-                    type: 'enum',
-                    enumValues: ['large', 'default', 'small'],
-                    defaultValue: '',
-                },
-                {
-                    key: 'type',
-                    desc: '类型',
-                    type: 'enum',
-                    enumValues: [
-                        'primary',
-                        'success',
-                        'warning',
-                        'danger',
-                        'info',
-                    ],
-                    defaultValue: '',
-                },
-                {
-                    key: 'plain',
-                    desc: '是否为朴素按钮',
-                    type: 'boolean',
-                    defaultValue: false,
-                },
-                {
-                    key: 'text',
-                    minVersion: '2.2.0',
-                    desc: '是否为文字按钮',
-                    type: 'boolean',
-                    defaultValue: false,
-                },
-                {
-                    key: 'bg',
-                    minVersion: '2.2.0',
-                    desc: '是否显示文字按钮背景颜色',
-                    type: 'boolean',
-                    defaultValue: false,
-                },
-                {
-                    key: 'link',
-                    minVersion: '2.2.1',
-                    desc: '是否为链接按钮',
-                    type: 'boolean',
-                    defaultValue: false,
-                },
-                {
-                    key: 'round',
-                    desc: '是否为圆角按钮',
-                    type: 'boolean',
-                    defaultValue: false,
-                },
-                {
-                    key: 'circle',
-                    desc: '是否为圆形按钮',
-                    type: 'boolean',
-                    defaultValue: false,
-                },
-                {
-                    key: 'loading',
-                    desc: '是否为加载中状态',
-                    type: 'boolean',
-                    defaultValue: false,
-                },
-                {
-                    key: 'loading-icon',
-                    desc: '自定义加载中状态图标组件',
-                    type: ['string', 'Component'],
-                    defaultValue: 'Loading',
-                },
-                {
-                    key: 'disabled',
-                    desc: '按钮是否为禁用状态',
-                    type: 'boolean',
-                    defaultValue: false,
-                },
-                {
-                    key: 'icon',
-                    desc: '图标组件',
-                    type: ['string', 'Component'],
-                    defaultValue: '',
-                },
-                {
-                    key: 'autofocus',
-                    desc: '原生 autofocus 属性',
-                    type: 'boolean',
-                    defaultValue: false,
-                },
-                {
-                    key: 'native-type',
-                    desc: '原生 type 属性',
-                    type: 'enum',
-                    enumValues: ['button', 'submit', 'reset'],
-                    defaultValue: 'button',
-                },
-                {
-                    key: 'auto-insert-space',
-                    desc: '自动在两个中文字符之间插入空格',
-                    type: 'boolean',
-                    defaultValue: '',
-                },
-                {
-                    key: 'color',
-                    desc: '自定义按钮颜色, 并自动计算 hover 和 active 触发后的颜色',
-                    type: 'color',
-                    defaultValue: '',
-                },
-                {
-                    key: 'dark',
-                    desc: 'dark 模式, 意味着自动设置 color 为 dark 模式的颜色',
-                    type: 'boolean',
-                    defaultValue: false,
-                },
-                {
-                    key: 'tag',
-                    minVersion: '2.3.4',
-                    desc: '自定义元素标签',
-                    type: ['string', 'Component'],
-                    defaultValue: 'button',
-                },
-            ];
-            component.componentProps = component.propsAttrs.reduce(
-                (total, item) => {
-                    if (item.defaultValue !== '') {
-                        total[item.key] = item.defaultValue;
-                    }
-                    return total;
-                },
-                {} as Record<string, any>
-            );
-            return CurrentCom;
-        });
-        component.componentInstance = markRaw(ButtonCounter);
+        console.log('component :>> ', component);
+        await loadAsyncComponent(component);
 
         // 根据画面比例修改组件样式比例
         changeComponentSizeWithScale(component);
@@ -313,6 +154,7 @@ const handleDrop = (e: DragEvent) => {
         editStore.addComponent({ component });
         editStore.recordSnapshot();
     }
+    loadingInstance.close();
 };
 
 const handleDragOver = (e: DragEvent) => {

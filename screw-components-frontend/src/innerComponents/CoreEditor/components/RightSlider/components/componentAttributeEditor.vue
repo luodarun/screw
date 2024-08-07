@@ -9,28 +9,28 @@
             >
                 <el-color-picker
                     v-if="item.type === 'Color' || item.type === 'color'"
-                    v-model="curComponent['componentProps'][item.key]"
+                    v-model="curComponent['propValue'][item.key]"
                 />
                 <el-radio-group
                     v-else-if="item.type === 'enum'"
-                    v-model="curComponent['componentProps'][item.key]"
+                    v-model="curComponent['propValue'][item.key]"
                 >
                     <el-radio v-for="(val, index) in item.enumValues" :key="val" :value="val">{{ val }}</el-radio>
                 </el-radio-group>
                 <el-radio-group
                 v-else-if="item.type === 'Boolean' || item.type === 'boolean'"
-                    v-model="curComponent['componentProps'][item.key]"
+                    v-model="curComponent['propValue'][item.key]"
                 >
                     <el-radio :value="true">是</el-radio>
                     <el-radio :value="false">否</el-radio>
                 </el-radio-group>
                 <el-input-number
                 v-else-if="item.type === 'Number'"
-                    v-model="curComponent['componentProps'][item.key]"
+                    v-model="curComponent['propValue'][item.key]"
                 />
                 <el-input
                     v-else
-                    v-model="curComponent['componentProps'][item]"
+                    v-model="curComponent['propValue'][item]"
                 ></el-input>
             </el-form-item>
         </el-form>

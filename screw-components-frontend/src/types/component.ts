@@ -1,19 +1,43 @@
 export type ComponentStaticScheme = {
     name: string;
+    libName: string;
     component: string;
+    configUrl: string;
     icon?: string;
     iconStyle?: Record<string, any>;
     img?: string;
 };
-export type ComponentPlatformScheme = {
-    id: string;
+
+export type SupportCssItem = {
+    key: string,
+    defaultValue: any,
 };
-export type ComponentScheme = ComponentStaticScheme & {
-    lastScale?: number;
-    propValue?: any;
-    animations: Animation[];
+
+export type ComponentPropItem = {
+    key: string,
+    type: string | string[],
+    enumValues?: string[];
+    minVersion?: string,
+    maxVersion?: string;
+    desc?: string,
+    defaultValue?: any,
+};
+
+export type ComponentPlatformStaticScheme = {
+    id: string;
+    componentInstance?: any;
+    propsAttrs: ComponentPropItem[];
+    supportCss?: SupportCssItem[];
     isLock?: boolean;
 };
+
+export type ComponentPlatformValueScheme = {
+    lastScale?: number;
+    propValue?: Record<string, any>;
+    animations: Animation[];
+    style: CommonStyle;
+};
+
 export type Point = {
     x: number;
     y: number;
@@ -28,9 +52,7 @@ export type CanvasStyleData = {
     background: string;
     fontSize: number;
 }
-export type UsingComponent = ComponentScheme & {
-    style: CommonStyle;
-};
+export type ComponentScheme = ComponentStaticScheme & ComponentPlatformStaticScheme & ComponentPlatformValueScheme;
 
 export type Animation = {
     animationTime: number;
