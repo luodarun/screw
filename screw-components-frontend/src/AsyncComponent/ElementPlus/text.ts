@@ -1,4 +1,4 @@
-import type { SupportCssItem, ComponentPropItem } from '@/types/component';
+import type { SupportCssItem, ComponentPropItem, ComponentSlotItem } from '@/types/component';
 
 const supportCss: SupportCssItem[] = [
     {
@@ -11,13 +11,6 @@ const supportCss: SupportCssItem[] = [
     },
 ];
 const propsAttrs: ComponentPropItem[] = [
-    {
-        key: 'size',
-        desc: '尺寸',
-        type: 'enum',
-        enumValues: ['large', 'default', 'small'],
-        defaultValue: '',
-    },
     {
         key: 'type',
         desc: '类型',
@@ -46,8 +39,17 @@ const propsAttrs: ComponentPropItem[] = [
         defaultValue: 'span',
     },
 ];
+
+const slots: ComponentSlotItem[] = [
+    {
+        name: 'default',
+        value: 'default-text',
+    },
+];
+
 export default {
     supportCss,
     propsAttrs,
+    slots,
     url: 'element-plus/es/components/text/index'
 };

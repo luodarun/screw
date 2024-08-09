@@ -28,6 +28,7 @@ export type ComponentPlatformStaticScheme = {
     componentInstance?: any;
     propsAttrs: ComponentPropItem[];
     supportCss?: SupportCssItem[];
+    slots?: ComponentSlotItem[];
     isLock?: boolean;
 };
 
@@ -35,7 +36,14 @@ export type ComponentPlatformValueScheme = {
     lastScale?: number;
     propValue?: Record<string, any>;
     animations: Animation[];
+    tempStyle: CommonStyle;
     style: CommonStyle;
+    enableScale?: boolean;
+};
+
+export type ComponentSlotItem = {
+    name: string,
+    value?: any;
 };
 
 export type Point = {
@@ -51,6 +59,7 @@ export type CanvasStyleData = {
     opacity: number;
     background: string;
     fontSize: number;
+    position: 'relative' | 'absolution';
 }
 export type ComponentScheme = ComponentStaticScheme & ComponentPlatformStaticScheme & ComponentPlatformValueScheme;
 

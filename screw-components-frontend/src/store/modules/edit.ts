@@ -24,20 +24,6 @@ export const useEditStore = defineStore('editStore', {
                             height: '24',
                             color: 'red',
                         },
-
-
-
-                        // propValue: {},
-                        // allSlot: ['default', 'loading', 'icon'],
-                        // slots: [
-                        //     {
-                        //         name: 'default',
-                        //         type: 'text',
-                        //         default: 'default',
-                        //         slotProps: {},
-                        //         value: '',
-                        //     },
-                        // ],
                     },
                     {
                         icon: 'icon-park:add-text',
@@ -85,6 +71,7 @@ export const useEditStore = defineStore('editStore', {
             opacity: 1,
             background: '#fff',
             fontSize: 14,
+            position: 'absolution'
         } as CanvasStyleData,
         isDarkMode: false,
     }),

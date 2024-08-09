@@ -1,12 +1,11 @@
 <template>
-    <div class="right-slider" v-if="curComponent">
+    <div class="right-slider">
         <el-scrollbar height="100%">
-            <el-collapse v-model="activeNames">
+            <el-collapse v-if="curComponent" v-model="activeNames">
                 <ComponentAttributeEditor></ComponentAttributeEditor>
                 <StyleEditor></StyleEditor>
             </el-collapse>
-            <div>slot</div>
-            <div>default: <input type="text" /></div>
+            <PageAttr v-else></PageAttr>
         </el-scrollbar>
     </div>
 </template>
@@ -16,6 +15,7 @@ import { useEditStore } from '@/store/modules/edit';
 import { storeToRefs } from 'pinia';
 import StyleEditor from './components/StyleEditor.vue';
 import ComponentAttributeEditor from './components/componentAttributeEditor.vue';
+import PageAttr from './components/PageAttr.vue';
 
 const editStore = useEditStore();
 const { curComponent } = storeToRefs(editStore);

@@ -39,20 +39,15 @@ export const needUnit: string[] = [
 
 export function getStyle(style: Record<string, any>, filter: string[] = []) {
   const result: any = {}
-  console.log('style :>> ', style);
   Object.keys(style).forEach(key => {
-        console.log('key :>> ', key, filter);
       if (!filter.includes(key)) {
-        console.log('111 :>> ', 111);
           if (key != 'rotate') {
-            console.log('style[key] :>> ', key, style[key]);
               if (style[key] !== '') {
                   result[key] = style[key]
 
                   if (needUnit.includes(key)) {
                       result[key] += 'px'
                   }
-                  console.log('result[key] :>> ', result[key]);
               }
           } else {
               result.transform = key + '(' + style[key] + 'deg)'

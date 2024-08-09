@@ -1,15 +1,13 @@
-import { createApp, defineAsyncComponent } from 'vue';
+import { createApp } from 'vue';
 import '@/styles/reset.scss';
 import '@/styles/global.scss'
+import ElementPlus from 'element-plus'
 import registerComponents from './baseComponents/registerComponents';
-import 'element-plus/es/components/message/style/css';
-
 import store from './store/index';
 import router from './router/index';
 import App from './App.vue';
-import 'element-plus/es/components/button/style/index'
-import 'element-plus/es/components/button/index';
+import 'element-plus/dist/index.css'
 
 const app = createApp(App);
 registerComponents(app);
-app.use(store).use(router).mount('#app');
+app.use(ElementPlus).use(store).use(router).mount('#app');

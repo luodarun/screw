@@ -47,18 +47,18 @@
                                 v-slot:[slotItem.name]="slotProps"
                             >
                                 <!-- 如何即时更改此处效果？其实一般人根本到不了这里 -->
-                                <template v-if="slotItem.type === 'text'">
-                                    {{ slotItem.value || slotItem.default }}
+                                <template v-if="typeof slotItem.value === 'string'">
+                                    {{ slotItem.value }}
                                 </template>
                                 <!-- 是不是又需要一层shape？ -->
                                 <component
                                     v-else
-                                    :is="slotItem.value || slotItem.default"
+                                    :is="slotItem.value"
                                     v-bind="
                                         Object.assign(
                                             {},
                                             slotProps,
-                                            slotItem.slotProps
+                                            slotItem.value.propValue
                                         )
                                     "
                                 ></component>
@@ -137,9 +137,7 @@ const handleDrop = async (e: DragEvent) => {
     const rectInfo = editor.value?.getBoundingClientRect();
     if (index && index2 && rectInfo) {
         const component = deepCopy(allComponentList.value[Number(index)]['components'][Number(index2)]);
-        component.style = {
-            width: 200,
-            height: 50,
+        component.tempStyle = {
             rotate: 0,
             top: e.clientY - rectInfo.y,
             left: e.clientX - rectInfo.x,

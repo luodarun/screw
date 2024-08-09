@@ -6,9 +6,6 @@ import mdPlugin, { Mode } from 'vite-plugin-markdown';
 import defineOptions from 'unplugin-vue-define-options/vite';
 import progress from 'vite-plugin-progress';
 import viteCompression from 'vite-plugin-compression';
-import AutoImport from 'unplugin-auto-import/vite';
-import Components from 'unplugin-vue-components/vite';
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import path from 'path';
 const pathSrc = path.resolve(__dirname, 'src');
 // https://vitejs.dev/config/
@@ -25,19 +22,6 @@ export default defineConfig(env => {
             }),
             defineOptions(), // 扩展defineOptions全局方法
             svgLoader(),
-            AutoImport({
-                dts: path.resolve(pathSrc, 'auto-imports.d.ts'),
-                resolvers: [
-                    ElementPlusResolver(),
-                ],
-            }),
-            Components({
-                dts: path.resolve(pathSrc, 'components.d.ts'),
-                dirs: [],
-                resolvers: [
-                    ElementPlusResolver(),
-                ],
-            }),
             viteCompression({
                 threshold: 100 * 1024, // 需要压缩的最小文件大小，这里是100K
             }),

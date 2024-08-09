@@ -1,9 +1,17 @@
-import type { SupportCssItem, ComponentPropItem } from '@/types/component';
+import type { SupportCssItem, ComponentPropItem, ComponentSlotItem } from '@/types/component';
 
 const supportCss: SupportCssItem[] = [
     {
         key: 'fontSize',
         defaultValue: '14',
+    },
+    {
+        key: 'width',
+        defaultValue: '',
+    },
+    {
+        key: 'height',
+        defaultValue: '',
     },
 ];
 const propsAttrs: ComponentPropItem[] = [
@@ -123,8 +131,18 @@ const propsAttrs: ComponentPropItem[] = [
         defaultValue: 'button',
     },
 ];
+
+const slots: ComponentSlotItem[] = [
+    {
+        name: 'default',
+        value: 'default',
+    },
+];
+
 export default {
     supportCss,
     propsAttrs,
+    slots,
+    enableScale: true,
     url: 'element-plus/es/components/button/index'
 };

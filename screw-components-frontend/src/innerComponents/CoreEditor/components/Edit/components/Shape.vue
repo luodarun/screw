@@ -9,7 +9,7 @@
         <el-icon v-show="isActive()" class="rotate-icon" @mousedown="handleRotate"><RefreshRight /></el-icon>
         <span v-show="element.isLock" class="iconfont icon-suo"></span>
         <div
-            v-for="item in isActive() ? getPointList() : []"
+            v-for="item in (isActive() && element.enableScale ? getPointList() : [])"
             :key="item"
             class="shape-point"
             :style="getPointStyle(item)"
@@ -158,33 +158,36 @@ const getPointStyle = (point: string) => {
     const hasR = /r/.test(point);
     let newLeft = 0;
     let newTop = 0;
+    const style: Record<string, any> = {
+        // marginLeft: '-4px',
+        // marginTop: '-4px',
+        cursor: cursors.value[point],
+    };
 
-    // 四个角的点
-    if (point.length === 2) {
-        newLeft = hasL ? 0 : width;
-        newTop = hasT ? 0 : height;
-    } else {
+    if (hasL) {
+        style.left = '-4px';
+    }
+    if (hasR) {
+        style.right = '-4px';
+    }
+    if (hasT) {
+        style.top = '-4px';
+    }
+    if (hasB) {
+        style.bottom = '-4px';
+    }
+    // 需要居中
+    if (point.length === 1) {
         // 上下两点的点，宽度居中
         if (hasT || hasB) {
-            newLeft = width / 2;
-            newTop = hasT ? 0 : height;
+            style.left = `calc(50% - 4px)`;
         }
 
         // 左右两边的点，高度居中
         if (hasL || hasR) {
-            newLeft = hasL ? 0 : width;
-            newTop = Math.floor(height / 2);
+            style.top = `calc(50% - 4px)`;
         }
     }
-
-    const style = {
-        marginLeft: '-4px',
-        marginTop: '-4px',
-        left: `${newLeft}px`,
-        top: `${newTop}px`,
-        cursor: cursors.value[point],
-    };
-
     return style;
 };
 
@@ -299,7 +302,11 @@ const handleMouseDownOnPoint = (point: HandleDirection, e: MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
 
-    const style = { ...props.defaultStyle };
+    const rect = $el.value!.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+
+    const style = { ...props.defaultStyle, width, height };
 
     // 组件宽高比
     const proportion = style.width / style.height;
