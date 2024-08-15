@@ -18,7 +18,7 @@ export function getCanvasStyle(canvasStyleData: Record<string, any>) {
 
 export function getShapeStyle(style: Record<string, any>) {
     const result: any = {};
-    ['width', 'height', 'top', 'left', 'rotate'].forEach(attr => {
+    ['top', 'left', 'rotate'].forEach(attr => {
         if (attr != 'rotate') {
             result[attr] = style[attr] + 'px';
         } else {
@@ -57,7 +57,6 @@ export function getStyle(style: Record<string, any>, filter: string[] = []) {
             }
         }
     });
-    console.log('result :>> ', result);
     return result;
 }
 

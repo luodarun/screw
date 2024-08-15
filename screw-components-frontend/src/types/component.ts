@@ -38,6 +38,7 @@ export type ComponentPlatformValueScheme = {
     animations: Animation[];
     tempStyle: CommonStyle;
     style: CommonStyle;
+    shapeStyle: { left: number; top: number; rotate: number;};
     enableScale?: boolean;
 };
 

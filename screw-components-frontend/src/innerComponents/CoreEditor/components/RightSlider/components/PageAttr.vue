@@ -8,7 +8,7 @@
             <el-form-item label-position="top" label="页面布局">
                 <el-radio-group v-model="canvasStyleData.position">
                     <el-radio value="relative">相对布局</el-radio>
-                    <el-radio value="absolution">绝对布局</el-radio>
+                    <el-radio value="absolute">绝对布局</el-radio>
                 </el-radio-group>
             </el-form-item>
         </el-form>

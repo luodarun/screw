@@ -115,25 +115,21 @@ export const useEditStore = defineStore('editStore', {
         hideContextMenu() {
             this.menuShow = false;
         },
-        setShapeStyle({
+        setStyle({
             top,
             left,
-            width,
-            height,
             rotate,
-            padding,
-        }: CommonStyle) {
+        }: { left: number; top: number; rotate: number;}, style?: { width: number, height: number }) {
             if (!this.curComponent) {
                 return;
             }
             if (top !== undefined)
-                this.curComponent.style.top = Math.round(top);
+                this.curComponent.shapeStyle.top = Math.round(top);
             if (left !== undefined)
-                this.curComponent.style.left = Math.round(left);
-            if (width) this.curComponent.style.width = Math.round(width);
-            if (padding) this.curComponent.style.padding = Math.round(padding);
-            if (height) this.curComponent.style.height = Math.round(height);
-            if (rotate) this.curComponent.style.rotate = Math.round(rotate);
+                this.curComponent.shapeStyle.left = Math.round(left);
+            if (rotate) this.curComponent.shapeStyle.rotate = Math.round(rotate);
+            if (style?.width) this.curComponent.style.width = Math.round(style.width);
+            if (style?.height) this.curComponent.style.height = Math.round(style.height);
         },
     },
     // 稍后将由插件读取

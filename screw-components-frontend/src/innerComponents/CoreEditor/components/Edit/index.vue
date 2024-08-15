@@ -28,7 +28,7 @@
                     <Shape
                         v-for="(item, index) in usingComponents"
                         :key="item.id"
-                        :default-style="item.style"
+                        :style="getShapeStyle(item.shapeStyle)"
                         :active="item.id === (curComponent || {}).id"
                         :element="item"
                         :index="index"
@@ -105,7 +105,7 @@ const handleDrop = async (e: DragEvent) => {
     const rectInfo = editor.value?.getBoundingClientRect();
     if (index && index2 && rectInfo) {
         const component = deepCopy(allComponentList.value[Number(index)]['components'][Number(index2)]);
-        component.tempStyle = {
+        component.shapeStyle = {
             rotate: 0,
             top: e.clientY - rectInfo.y,
             left: e.clientX - rectInfo.x,

@@ -97,11 +97,6 @@ const props = defineProps({
         type: Object as PropType<ComponentScheme>,
         default: () => {},
     },
-    defaultStyle: {
-        required: true,
-        type: Object as PropType<CommonStyle>,
-        default: () => {},
-    },
     index: {
         required: true,
         type: Number,
@@ -161,7 +156,7 @@ const handleRotate = (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     // 初始坐标和初始角度
-    const pos = { ...props.defaultStyle };
+    const pos = { ...props.element.shapeStyle };
     const startY = e.clientY;
     const startX = e.clientX;
     const startRotate = pos.rotate;
@@ -187,7 +182,7 @@ const handleRotate = (e: MouseEvent) => {
         // 获取旋转的角度值
         pos.rotate = startRotate + rotateDegreeAfter - rotateDegreeBefore;
         // 修改当前组件样式
-        editStore.setShapeStyle(pos);
+        editStore.setStyle(pos);
     };
 
     const up = () => {
@@ -287,7 +282,7 @@ const handleMouseDownOnShape = (e: MouseEvent) => {
 
     cursors.value = getCursor(); // 根据旋转角度获取光标位置
 
-    const pos = { ...props.defaultStyle };
+    const pos = { ...props.element.shapeStyle };
     const startY = e.clientY;
     const startX = e.clientX;
     // 如果直接修改属性，值的类型会变为字符串，所以要转为数值型
@@ -304,7 +299,7 @@ const handleMouseDownOnShape = (e: MouseEvent) => {
         pos.left = curX - startX + startLeft;
 
         // 修改当前组件样式
-        editStore.setShapeStyle(pos);
+        editStore.setStyle(pos);
         // 等更新完当前组件的样式并绘制到屏幕后再判断是否需要吸附
         // 如果不使用 $nextTick，吸附后将无法移动
         nextTick(() => {
@@ -352,15 +347,15 @@ const handleMouseDownOnPoint = (point: HandleDirection, e: MouseEvent) => {
     const width = rect.width;
     const height = rect.height;
 
-    const style = { ...props.defaultStyle, width, height };
+    const style = { ...props.element.style, ...props.element.shapeStyle, width, height };
 
     // 组件宽高比
     const proportion = style.width / style.height;
 
     // 组件中心点
     const center = {
-        x: style.left + style.width / 2,
-        y: style.top + style.height / 2,
+        x: props.element.shapeStyle.left + style.width / 2,
+        y: props.element.shapeStyle.top + style.height / 2,
     };
 
     // 获取画布位移信息
@@ -416,7 +411,14 @@ const handleMouseDownOnPoint = (point: HandleDirection, e: MouseEvent) => {
                 symmetricPoint,
             }
         );
-        editStore.setShapeStyle(style);
+        editStore.setStyle({
+            left: style.left,
+            top: style.top,
+            rotate: style.rotate,
+        }, {
+            width: style.width,
+            height: style.height,
+        });
     };
 
     const up = () => {

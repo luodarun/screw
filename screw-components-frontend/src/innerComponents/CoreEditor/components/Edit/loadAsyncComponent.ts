@@ -37,7 +37,7 @@ async function loadAsyncComponent(baseComponent: ComponentScheme) {
             }
             return total;
         },
-        baseComponent.tempStyle as any
+        {} as any
     );
     baseComponent.propValue = baseComponent.propsAttrs.reduce(
         (total, item) => {
