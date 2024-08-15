@@ -27,6 +27,7 @@ async function loadAsyncComponent(baseComponent: ComponentScheme) {
     const componentName = component.toLowerCase().slice(2);
     const { default: ComponentConfig } = await import(`../../../../AsyncComponent/ElementPlus/${componentName}.ts`);
 
+    baseComponent.enableScale = ComponentConfig.enableScale;
     baseComponent.propsAttrs = ComponentConfig.propsAttrs;
     baseComponent.supportCss = ComponentConfig.supportCss || [];
     baseComponent.style = baseComponent.supportCss!.reduce(

@@ -1,21 +1,57 @@
 <template>
     <div
         ref="$el"
-        class="shape"
-        :class="{ active }"
+        :class="{ shape: true, active }"
+        :style="{ position: canvasStyleData.position }"
+        @drop="handleDrop"
+        @dragover="handleDragOver"
         @click="selectCurComponent"
         @mousedown="handleMouseDownOnShape"
     >
-        <el-icon v-show="isActive()" class="rotate-icon" @mousedown="handleRotate"><RefreshRight /></el-icon>
+        <el-icon
+            v-show="isActive()"
+            class="rotate-icon"
+            @mousedown="handleRotate"
+            ><RefreshRight
+        /></el-icon>
         <span v-show="element.isLock" class="iconfont icon-suo"></span>
         <div
-            v-for="item in (isActive() && element.enableScale ? getPointList() : [])"
+            v-for="item in isActive() && element.enableScale
+                ? getPointList()
+                : []"
             :key="item"
             class="shape-point"
             :style="getPointStyle(item)"
             @mousedown="handleMouseDownOnPoint(item, $event)"
         ></div>
-        <slot></slot>
+        <component
+            :is="element.componentInstance"
+            :id="'component' + element.id"
+            class="component"
+            :style="getComponentStyle(element.style)"
+            v-bind="element.propValue"
+        >
+            <template
+                v-for="(slotItem, index2) in element.slots"
+                v-slot:[slotItem.name]="slotProps"
+            >
+                <!-- 如何即时更改此处效果？其实一般人根本到不了这里 -->
+                <template v-if="typeof slotItem.value === 'string'">
+                    {{ slotItem.value }}
+                </template>
+                <!-- 是不是又需要一层shape？ -->
+                <Shape
+                    v-else
+                    :key="slotItem.value.id"
+                    :default-style="slotItem.value.style"
+                    :style="getShapeStyle(slotItem.value.style)"
+                    :active="slotItem.value.id === (curComponent || {}).id"
+                    :element="slotItem.value"
+                    :index="index"
+                    :class="{ lock: slotItem.value.isLock }"
+                ></Shape>
+            </template>
+        </component>
     </div>
 </template>
 
@@ -23,6 +59,7 @@
 import { storeToRefs } from 'pinia';
 import { onMounted, ref, nextTick } from 'vue';
 import type { PropType } from 'vue';
+import { ElLoading } from 'element-plus';
 import { RefreshRight } from '@element-plus/icons-vue';
 import { useEditStore } from '@/store/modules/edit';
 import eventBus from '../eventBus';
@@ -32,9 +69,23 @@ import { mod360 } from '../translate';
 import { isPreventDrop } from '../utils';
 import type { ComponentScheme, CommonStyle } from '@/types/component';
 import type { HandleDirection } from '../calculateComponentPositionAndSize';
+import { deepCopy } from '@/utils';
+import { nanoid } from 'nanoid';
+import loadAsyncComponent from '../loadAsyncComponent';
+import { changeComponentSizeWithScale } from '../changeComponentsSizeWithScale';
+import {
+    getStyle,
+    svgFilterAttrs,
+    getShapeStyle,
+} from '../style';
+
+defineOptions({
+    name: 'Shape',
+});
 
 const editStore = useEditStore();
-const { editor, curComponent } = storeToRefs(editStore);
+const { editor, curComponent, canvasStyleData, allComponentList } =
+    storeToRefs(editStore);
 
 const props = defineProps({
     active: {
@@ -151,16 +202,11 @@ const handleRotate = (e: MouseEvent) => {
 };
 
 const getPointStyle = (point: string) => {
-    const { width, height } = props.defaultStyle;
     const hasT = /t/.test(point);
     const hasB = /b/.test(point);
     const hasL = /l/.test(point);
     const hasR = /r/.test(point);
-    let newLeft = 0;
-    let newTop = 0;
     const style: Record<string, any> = {
-        // marginLeft: '-4px',
-        // marginTop: '-4px',
         cursor: cursors.value[point],
     };
 
@@ -370,7 +416,6 @@ const handleMouseDownOnPoint = (point: HandleDirection, e: MouseEvent) => {
                 symmetricPoint,
             }
         );
-        console.log('style :>> ', style);
         editStore.setShapeStyle(style);
     };
 
@@ -410,11 +455,53 @@ onMounted(() => {
         $el.value!.classList.remove('animated', 'infinite');
     });
 });
+
+const handleDragOver = (e: DragEvent) => {
+    e.preventDefault();
+    if (e.dataTransfer) {
+        e.dataTransfer.dropEffect = 'copy';
+    }
+};
+
+const handleDrop = async (e: DragEvent) => {
+    // 如果组件有申明default slot 将作为组件的default slot存在
+    const defaultSlot = props.element.slots?.find(
+        item => item.name === 'default'
+    );
+    if (!defaultSlot) {
+        return;
+    }
+    e.preventDefault();
+    e.stopPropagation();
+    const loadingInstance = ElLoading.service({ fullscreen: true });
+    const index = e.dataTransfer?.getData('index');
+    const index2 = e.dataTransfer?.getData('index2');
+    if (index && index2) {
+        const component = deepCopy(
+            allComponentList.value[Number(index)]['components'][Number(index2)]
+        );
+        component.tempStyle = {
+            rotate: 0,
+        };
+        component.id = nanoid();
+        await loadAsyncComponent(component);
+
+        // 根据画面比例修改组件样式比例
+        changeComponentSizeWithScale(component);
+        defaultSlot.value = component;
+        editStore.recordSnapshot();
+    }
+    loadingInstance.close();
+};
+
+const getComponentStyle = (style: CommonStyle) => {
+    return getStyle(style, []);
+};
 </script>
 
 <style lang="scss" scoped>
 .shape {
-    position: absolute;
+    width: fit-content;
     &:hover {
         cursor: move;
     }

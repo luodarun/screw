@@ -135,6 +135,7 @@ const propsAttrs: ComponentPropItem[] = [
 const slots: ComponentSlotItem[] = [
     {
         name: 'default',
+        type: 'dom',
         value: 'default',
     },
 ];

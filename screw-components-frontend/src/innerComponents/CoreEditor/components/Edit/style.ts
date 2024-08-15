@@ -1,29 +1,32 @@
 import type { CanvasStyleData, CommonStyle } from '@/types/component';
 
-const filterKeys = ['width', 'height', 'scale']
+// 宽高和放大指数在其它地方控制,position不做修改
+const canvasFilterKeys = ['width', 'height', 'scale', 'position'];
 export function getCanvasStyle(canvasStyleData: Record<string, any>) {
-    const result: any = {}
-    Object.keys(canvasStyleData).filter((key) => !filterKeys.includes(key)).forEach(key => {
-        result[key] = canvasStyleData[key];
-        if (key === 'fontSize') {
-            result[key] += 'px'
-        }
-    })
+    const result: any = {};
+    Object.keys(canvasStyleData)
+        .filter(key => !canvasFilterKeys.includes(key))
+        .forEach(key => {
+            result[key] = canvasStyleData[key];
+            if (key === 'fontSize') {
+                result[key] += 'px';
+            }
+        });
 
-    return result
+    return result;
 }
 
 export function getShapeStyle(style: Record<string, any>) {
     const result: any = {};
     ['width', 'height', 'top', 'left', 'rotate'].forEach(attr => {
         if (attr != 'rotate') {
-            result[attr] = style[attr] + 'px'
+            result[attr] = style[attr] + 'px';
         } else {
-            result.transform = 'rotate(' + style[attr] + 'deg)'
+            result.transform = 'rotate(' + style[attr] + 'deg)';
         }
-    })
+    });
 
-    return result
+    return result;
 }
 
 export const needUnit: string[] = [
@@ -35,27 +38,27 @@ export const needUnit: string[] = [
     'borderWidth',
     'letterSpacing',
     'borderRadius',
-]
+];
 
 export function getStyle(style: Record<string, any>, filter: string[] = []) {
-  const result: any = {}
-  Object.keys(style).forEach(key => {
-      if (!filter.includes(key)) {
-          if (key != 'rotate') {
-              if (style[key] !== '') {
-                  result[key] = style[key]
+    const result: any = {};
+    Object.keys(style).forEach(key => {
+        if (!filter.includes(key)) {
+            if (key != 'rotate') {
+                if (style[key] !== '') {
+                    result[key] = style[key];
 
-                  if (needUnit.includes(key)) {
-                      result[key] += 'px'
-                  }
-              }
-          } else {
-              result.transform = key + '(' + style[key] + 'deg)'
-          }
-      }
-  })
-  console.log('result :>> ', result);
-  return result
+                    if (needUnit.includes(key)) {
+                        result[key] += 'px';
+                    }
+                }
+            } else {
+                result.transform = key + '(' + style[key] + 'deg)';
+            }
+        }
+    });
+    console.log('result :>> ', result);
+    return result;
 }
 
 export const svgFilterAttrs = ['width', 'height', 'top', 'left', 'rotate'];

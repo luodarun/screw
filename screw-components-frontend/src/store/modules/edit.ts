@@ -71,7 +71,7 @@ export const useEditStore = defineStore('editStore', {
             opacity: 1,
             background: '#fff',
             fontSize: 14,
-            position: 'absolution'
+            position: 'absolute'
         } as CanvasStyleData,
         isDarkMode: false,
     }),

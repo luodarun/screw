@@ -43,6 +43,7 @@ export type ComponentPlatformValueScheme = {
 
 export type ComponentSlotItem = {
     name: string,
+    type: 'string' | 'dom',
     value?: any;
 };
 
@@ -59,7 +60,7 @@ export type CanvasStyleData = {
     opacity: number;
     background: string;
     fontSize: number;
-    position: 'relative' | 'absolution';
+    position: 'relative' | 'absolute';
 }
 export type ComponentScheme = ComponentStaticScheme & ComponentPlatformStaticScheme & ComponentPlatformValueScheme;
 

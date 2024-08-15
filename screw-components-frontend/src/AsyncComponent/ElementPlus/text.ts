@@ -43,6 +43,7 @@ const propsAttrs: ComponentPropItem[] = [
 const slots: ComponentSlotItem[] = [
     {
         name: 'default',
+        type: 'string',
         value: 'default-text',
     },
 ];

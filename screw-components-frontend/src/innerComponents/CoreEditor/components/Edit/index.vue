@@ -29,43 +29,11 @@
                         v-for="(item, index) in usingComponents"
                         :key="item.id"
                         :default-style="item.style"
-                        :style="getShapeStyle(item.style)"
                         :active="item.id === (curComponent || {}).id"
                         :element="item"
                         :index="index"
                         :class="{ lock: item.isLock }"
                     >
-                        <component
-                            :is="item.componentInstance"
-                            :id="'component' + item.id"
-                            class="component"
-                            :style="getComponentStyle(item.style)"
-                            v-bind="item.propValue"
-                        >
-                            <template
-                                v-for="(slotItem, index2) in item.slots"
-                                v-slot:[slotItem.name]="slotProps"
-                            >
-                                <!-- 如何即时更改此处效果？其实一般人根本到不了这里 -->
-                                <template v-if="typeof slotItem.value === 'string'">
-                                    {{ slotItem.value }}
-                                </template>
-                                <!-- 是不是又需要一层shape？ -->
-                                <component
-                                    v-else
-                                    :is="slotItem.value"
-                                    v-bind="
-                                        Object.assign(
-                                            {},
-                                            slotProps,
-                                            slotItem.value.propValue
-                                        )
-                                    "
-                                ></component>
-                            </template>
-                        </component>
-                        <!-- :prop-value="item.propValue"
-                            :element="item" -->
                     </Shape>
                 </div>
             </div>
@@ -143,12 +111,10 @@ const handleDrop = async (e: DragEvent) => {
             left: e.clientX - rectInfo.x,
         };
         component.id = nanoid();
-        console.log('component :>> ', component);
         await loadAsyncComponent(component);
 
         // 根据画面比例修改组件样式比例
         changeComponentSizeWithScale(component);
-        console.log('component :>> ', component);
         editStore.addComponent({ component });
         editStore.recordSnapshot();
     }
@@ -200,10 +166,6 @@ const handleContextMenu = (e: MouseEvent) => {
     // this.$store.commit('showContextMenu', { top, left })
 };
 
-const getComponentStyle = (style: CommonStyle) => {
-    return getStyle(style, svgFilterAttrs);
-};
-
 onMounted(() => {
     editStore.editor = document.querySelector('#editor');
 });
@@ -213,8 +175,8 @@ onMounted(() => {
     background: var(--secondary-bg-color);
     height: 100%;
     flex: 1;
+    overflow: hidden;
     box-sizing: border-box;
-    overflow: auto;
     padding: 20px;
     transition: all 0.3s;
 
