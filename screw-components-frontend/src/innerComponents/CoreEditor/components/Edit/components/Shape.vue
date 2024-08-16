@@ -2,7 +2,7 @@
     <div
         ref="$el"
         :class="{ shape: true, active }"
-        :style="{ position: canvasStyleData.position }"
+        :style="innerShapeStyle"
         @drop="handleDrop"
         @dragover="handleDragOver"
         @click="selectCurComponent"
@@ -43,6 +43,7 @@
                 <Shape
                     v-else
                     :key="slotItem.value.id"
+                    is-inner
                     :default-style="slotItem.value.style"
                     :style="getShapeStyle(slotItem.value.style)"
                     :active="slotItem.value.id === (curComponent || {}).id"
@@ -57,7 +58,7 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
-import { onMounted, ref, nextTick } from 'vue';
+import { onMounted, ref, nextTick, computed } from 'vue';
 import type { PropType } from 'vue';
 import { ElLoading } from 'element-plus';
 import { RefreshRight } from '@element-plus/icons-vue';
@@ -75,7 +76,6 @@ import loadAsyncComponent from '../loadAsyncComponent';
 import { changeComponentSizeWithScale } from '../changeComponentsSizeWithScale';
 import {
     getStyle,
-    svgFilterAttrs,
     getShapeStyle,
 } from '../style';
 
@@ -89,6 +89,10 @@ const { editor, curComponent, canvasStyleData, allComponentList } =
 
 const props = defineProps({
     active: {
+        type: Boolean,
+        default: false,
+    },
+    isInner: {
         type: Boolean,
         default: false,
     },
@@ -149,6 +153,16 @@ const getPointList = () => {
 const isActive = () => {
     return props.active && !props.element.isLock;
 };
+
+const innerShapeStyle = computed(() => {
+    const style: Record<string, any> = {};
+    if (props.isInner) {
+        style.position = 'relative';
+    } else {
+        style.position = canvasStyleData.value.position === 'absolute' ? 'absolute' : 'relative';
+    }
+    return style;
+});
 
 // 处理旋转
 const handleRotate = (e: MouseEvent) => {
@@ -432,13 +446,13 @@ const handleMouseDownOnPoint = (point: HandleDirection, e: MouseEvent) => {
 };
 
 const isNeedLockProportion = () => {
-    if (props.element.component != 'Group') return false;
-    const rotates = [0, 90, 180, 360];
-    for (const component of props.element.propValue) {
-        if (!rotates.includes(mod360(parseInt(component.style.rotate)))) {
-            return true;
-        }
-    }
+    // if (props.element.component != 'Group') return false;
+    // const rotates = [0, 90, 180, 360];
+    // for (const component of props.element.propValue) {
+    //     if (!rotates.includes(mod360(parseInt(component.style.rotate)))) {
+    //         return true;
+    //     }
+    // }
 
     return false;
 };

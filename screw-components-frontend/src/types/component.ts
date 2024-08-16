@@ -45,7 +45,7 @@ export type ComponentPlatformValueScheme = {
 export type ComponentSlotItem = {
     name: string,
     type: 'string' | 'dom',
-    value?: any;
+    value?: string | ComponentScheme[];
 };
 
 export type Point = {

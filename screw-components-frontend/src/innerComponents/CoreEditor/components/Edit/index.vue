@@ -20,7 +20,7 @@
                             changeStyleWithScale(canvasStyleData.height) + 'px',
                     }"
                     @contextmenu="handleContextMenu"
-                    @mousedown="handleMouseDown"
+                    @mousedown="handleEditorMouseDown"
                 >
                     <!-- 网格线 -->
                     <Grid :is-dark-mode="isDarkMode" />
@@ -35,6 +35,14 @@
                         :class="{ lock: item.isLock }"
                     >
                     </Shape>
+                    <!-- 标线 -->
+                    <MarkLine></MarkLine>
+                    <!-- 选中区域 -- 只是为了组合 -->
+                    <Area
+                        v-show="isShowArea"
+                        :areaStart="areaStart"
+                        :areaSize="areaSize"
+                    />
                 </div>
             </div>
         </el-scrollbar>
@@ -44,22 +52,24 @@
 import { ref, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { nanoid } from 'nanoid';
-import { ElLoading } from 'element-plus'
+import { ElLoading } from 'element-plus';
 import { useEditStore } from '@/store/modules/edit';
 import { deepCopy } from '@/utils/index';
+import { isPreventDrop } from './utils';
 import { changeComponentSizeWithScale } from './changeComponentsSizeWithScale';
 import {
     getCanvasStyle,
-    getStyle,
-    svgFilterAttrs,
+    getComponentRotatedStyle,
     getShapeStyle,
 } from './style';
 import { changeStyleWithScale } from './translate';
 import Grid from './components/Grid.vue';
 import Shape from './components/Shape.vue';
-import type { CommonStyle } from '@/types/component';
 import loadAsyncComponent from './loadAsyncComponent';
+import Area from './components/Area.vue';
+import MarkLine from './components/MarkLine.vue';
 import UniBadge from '@dcloudio/uni-ui/lib/uni-badge/uni-badge.vue';
+import { ComponentScheme } from '@/types/component';
 
 // 这种可选组件应该基本分为两类，第一类是在当前项目中维护的基本组件，第二类是不在项目中维护的组件，但是应该可以通过引入的方式来解决，这种方式除了使用$mount来生成对应的dom，还有其他办法吗？
 // 如何通过validator获取到符合要求的数据？validator里面也不只是单纯的啊！应该分两套，一套是基本的属性设置，string就是string，一套是组件提供的，组件提供的优先级高于基本的
@@ -96,7 +106,7 @@ const isEdit = ref(true);
 
 const handleDrop = async (e: DragEvent) => {
     console.log('handleDrop');
-    const loadingInstance = ElLoading.service({ fullscreen: true })
+    const loadingInstance = ElLoading.service({ fullscreen: true });
     e.preventDefault();
     e.stopPropagation();
 
@@ -104,7 +114,9 @@ const handleDrop = async (e: DragEvent) => {
     const index2 = e.dataTransfer?.getData('index2');
     const rectInfo = editor.value?.getBoundingClientRect();
     if (index && index2 && rectInfo) {
-        const component = deepCopy(allComponentList.value[Number(index)]['components'][Number(index2)]);
+        const component = deepCopy(
+            allComponentList.value[Number(index)]['components'][Number(index2)]
+        );
         component.shapeStyle = {
             rotate: 0,
             top: e.clientY - rectInfo.y,
@@ -164,6 +176,145 @@ const handleContextMenu = (e: MouseEvent) => {
     // }
 
     // this.$store.commit('showContextMenu', { top, left })
+};
+
+const isShowArea = ref(false);
+const areaStart = ref({ x: 0, y: 0 }); // 选中区域的起点位置
+const editorPosition = ref({ x: 0, y: 0 }); // 编辑器起点位置
+const areaSize = ref({ width: 0, height: 0 }); // 选中区域的大小
+const hideArea = () => {
+    isShowArea.value = false;
+    areaSize.value = { width: 0, height: 0 };
+    editStore.areaData = {
+        style: {
+            left: 0,
+            top: 0,
+            width: 0,
+            height: 0,
+        },
+        components: [],
+    };
+};
+const getSelectArea = () => {
+    const result: ComponentScheme[] = [];
+    // 区域起点坐标
+    const { x, y } = areaStart.value;
+    // 计算所有的组件数据，判断是否在选中区域内
+    usingComponents.value.forEach(component => {
+        if (component.isLock) return;
+
+        const { left, top, width, height } = getComponentRotatedStyle(
+            component.shapeStyle,
+            component.style
+        );
+        if (
+            x <= left &&
+            y <= top &&
+            left + width <= x + areaSize.value.width &&
+            top + height <= y + areaSize.value.height
+        ) {
+            result.push(component);
+        }
+    });
+
+    // 返回在选中区域内的所有组件
+    return result;
+};
+// 这东西存在的意义就是为了组合
+const createGroup = () => {
+    // 获取选中区域的组件数据
+    const areaData = getSelectArea();
+    if (areaData.length <= 1) {
+        hideArea();
+        return;
+    }
+
+    // 根据选中区域和区域中每个组件的位移信息来创建 Group 组件
+    // 要遍历选择区域的每个组件，获取它们的 left top right bottom 信息来进行比较
+    let top = Infinity,
+        left = Infinity;
+    let right = -Infinity,
+        bottom = -Infinity;
+    areaData.forEach(component => {
+        const style: Record<string, any> = getComponentRotatedStyle(
+            component.shapeStyle,
+            component.style
+        );
+        if (style.left < left) left = style.left;
+        if (style.top < top) top = style.top;
+        if (style.right > right) right = style.right;
+        if (style.bottom > bottom) bottom = style.bottom;
+    });
+
+    areaStart.value = {
+        x: left,
+        y: top,
+    };
+    areaSize.value = {
+        width: right - left,
+        height: bottom - top,
+    };
+    // 设置选中区域位移大小信息和区域内的组件数据
+    editStore.areaData = {
+        style: {
+            left,
+            top,
+            width: areaSize.value.width,
+            height: areaSize.value.height,
+        },
+        components: areaData,
+    };
+};
+
+const handleEditorMouseDown = (e: MouseEvent) => {
+    // 如果没有选中组件 在画布上点击时需要调用 e.preventDefault() 防止触发 drop 事件
+    if (!curComponent.value || isPreventDrop(curComponent.value.component)) {
+        e.preventDefault();
+    }
+    hideArea();
+
+    // 获取编辑器的位移信息，每次点击时都需要获取一次。主要是为了方便开发时调试用。
+    const rectInfo = editor.value!.getBoundingClientRect();
+    editorPosition.value = {
+        x: rectInfo.x,
+        y: rectInfo.y,
+    };
+    const startX = e.clientX;
+    const startY = e.clientY;
+    areaStart.value = {
+        x: startX - rectInfo.x,
+        y: startY - rectInfo.y,
+    };
+    // 展示选中区域
+    isShowArea.value = true;
+
+    const move = (moveEvent: MouseEvent) => {
+        areaSize.value = {
+            width: Math.abs(moveEvent.clientX - startX),
+            height: Math.abs(moveEvent.clientY - startY),
+        };
+        if (moveEvent.clientX < startX) {
+            areaStart.value.x = moveEvent.clientX - editorPosition.value.x;
+        }
+
+        if (moveEvent.clientY < startY) {
+            areaStart.value.y = moveEvent.clientY - editorPosition.value.y;
+        }
+    };
+
+    const up = (e: MouseEvent) => {
+        document.removeEventListener('mousemove', move);
+        document.removeEventListener('mouseup', up);
+
+        if (e.clientX == startX && e.clientY == startY) {
+            hideArea();
+            return;
+        }
+        createGroup();
+    };
+
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup', up);
 };
 
 onMounted(() => {
