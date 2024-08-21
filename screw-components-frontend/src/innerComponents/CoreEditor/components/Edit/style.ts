@@ -65,8 +65,13 @@ export const svgFilterAttrs = ['width', 'height', 'top', 'left', 'rotate'];
 
 
 // 获取一个组件旋转 rotate 后的样式
-export function getComponentRotatedStyle(shapeStyle: any, style: any) {
+export function getComponentRotatedStyle(shapeStyle: any, style: any, componentId: string) {
     const finalStyle: Record<string, any> = {};
+    if (!style.width) {
+        const rectInfo = document.querySelector('#component' + componentId)!.getBoundingClientRect();
+        style.width = rectInfo.width;
+        style.height = rectInfo.height;
+    }
     if (shapeStyle.rotate != 0) {
         const newWidth = style.width * cos(shapeStyle.rotate) + style.height * sin(shapeStyle.rotate)
         const diffX = (style.width - newWidth) / 2 // 旋转后范围变小是正值，变大是负值
@@ -83,6 +88,10 @@ export function getComponentRotatedStyle(shapeStyle: any, style: any) {
     } else {
         finalStyle.bottom = shapeStyle.top + style.height
         finalStyle.right = shapeStyle.left + style.width
+        finalStyle.top = shapeStyle.top;
+        finalStyle.left = shapeStyle.left;
+        finalStyle.width = style.width;
+        finalStyle.height = style.height;
     }
 
     return finalStyle

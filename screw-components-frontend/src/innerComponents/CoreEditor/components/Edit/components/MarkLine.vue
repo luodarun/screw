@@ -53,19 +53,20 @@ const showLine = (isDownward: boolean, isRightward: boolean) => {
     // 只能通过ID来获得了？
     const curComponentStyle = getComponentRotatedStyle(
         curComponent.value.shapeStyle,
-        curComponent.value.style
+        curComponent.value.style,
+        curComponent.value.id
     );
-    console.log('curComponentStyle :>> ', curComponentStyle);
     const curComponentHalfWidth = curComponentStyle.width / 2;
     const curComponentHalfHeight = curComponentStyle.height / 2;
     hideLine();
     usingComponents.value.forEach(component => {
         if (component == curComponent.value) return;
+        // 因为没有宽高，所以导致计算失败
         const componentStyle = getComponentRotatedStyle(
             component.shapeStyle,
-            component.style
+            component.style,
+            component.id
         );
-        console.log('componentStyle :>> ', componentStyle);
         const { top, left, bottom, right } = componentStyle;
         const componentHalfWidth = componentStyle.width / 2;
         const componentHalfHeight = componentStyle.height / 2;
@@ -184,7 +185,6 @@ const showLine = (isDownward: boolean, isRightward: boolean) => {
                 }
             );
         });
-        console.log('needToShow :>> ', needToShow);
         // 同一方向上同时显示三条线可能不太美观，因此才有了这个解决方案
         // 同一方向上的线只显示一条，例如多条横条只显示一条横线
         if (needToShow.length) {
@@ -259,7 +259,6 @@ const chooseTheTureLine = (needToShow: string | string[], isDownward: boolean, i
             lineStatus.value.xb = true;
         }
     }
-    console.log('lineStatus.value :>> ', lineStatus.value);
 };
 
 const isNearly = (dragValue: number, targetValue: number) => {

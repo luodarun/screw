@@ -4,6 +4,7 @@
             <el-collapse v-if="curComponent" v-model="activeNames">
                 <ComponentAttributeEditor></ComponentAttributeEditor>
                 <StyleEditor></StyleEditor>
+                <SlotEditor v-if="curComponent?.slots?.length"></SlotEditor>
             </el-collapse>
             <PageAttr v-else></PageAttr>
         </el-scrollbar>
@@ -16,6 +17,7 @@ import { storeToRefs } from 'pinia';
 import StyleEditor from './components/StyleEditor.vue';
 import ComponentAttributeEditor from './components/componentAttributeEditor.vue';
 import PageAttr from './components/PageAttr.vue';
+import SlotEditor from './components/SlotEditor.vue';
 
 const editStore = useEditStore();
 const { curComponent } = storeToRefs(editStore);

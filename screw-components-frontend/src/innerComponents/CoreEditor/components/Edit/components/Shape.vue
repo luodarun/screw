@@ -40,17 +40,18 @@
                     {{ slotItem.value }}
                 </template>
                 <!-- 是不是又需要一层shape？ -->
-                <Shape
-                    v-else
-                    :key="slotItem.value.id"
-                    is-inner
-                    :default-style="slotItem.value.style"
-                    :style="getShapeStyle(slotItem.value.style)"
-                    :active="slotItem.value.id === (curComponent || {}).id"
-                    :element="slotItem.value"
-                    :index="index"
-                    :class="{ lock: slotItem.value.isLock }"
-                ></Shape>
+                <template v-else>
+                    <Shape
+                        v-for="(slotItemChild, slotItemChildIndex) in slotItem.value"
+                        :key="slotItemChild.id"
+                        is-inner
+                        :default-style="slotItemChild.style"
+                        :active="slotItemChild.id === (curComponent || {}).id"
+                        :element="slotItemChild"
+                        :index="index"
+                        :class="{ lock: slotItemChild.isLock }"
+                    ></Shape>
+                </template>
             </template>
         </component>
     </div>
@@ -311,7 +312,6 @@ const handleMouseDownOnShape = (e: MouseEvent) => {
         const curY = moveEvent.clientY;
         pos.top = curY - startY + startTop;
         pos.left = curX - startX + startLeft;
-
         // 修改当前组件样式
         editStore.setStyle(pos);
         // 等更新完当前组件的样式并绘制到屏幕后再判断是否需要吸附
@@ -412,7 +412,6 @@ const handleMouseDownOnPoint = (point: HandleDirection, e: MouseEvent) => {
             x: moveEvent.clientX - Math.round(editorRectInfo.left),
             y: moveEvent.clientY - Math.round(editorRectInfo.top),
         };
-        console.log('curPositon :>> ', curPositon);
         calculateComponentPositionAndSize(
             point,
             style,
@@ -504,7 +503,7 @@ const handleDrop = async (e: DragEvent) => {
 
         // 根据画面比例修改组件样式比例
         changeComponentSizeWithScale(component);
-        defaultSlot.value = component;
+        defaultSlot.value = [component];
         editStore.recordSnapshot();
     }
     loadingInstance.close();

@@ -105,7 +105,6 @@ const {
 const isEdit = ref(true);
 
 const handleDrop = async (e: DragEvent) => {
-    console.log('handleDrop');
     const loadingInstance = ElLoading.service({ fullscreen: true });
     e.preventDefault();
     e.stopPropagation();
@@ -205,7 +204,8 @@ const getSelectArea = () => {
 
         const { left, top, width, height } = getComponentRotatedStyle(
             component.shapeStyle,
-            component.style
+            component.style,
+            component.id
         );
         if (
             x <= left &&
@@ -238,7 +238,8 @@ const createGroup = () => {
     areaData.forEach(component => {
         const style: Record<string, any> = getComponentRotatedStyle(
             component.shapeStyle,
-            component.style
+            component.style,
+            component.id
         );
         if (style.left < left) left = style.left;
         if (style.top < top) top = style.top;

@@ -134,8 +134,9 @@ export const useEditStore = defineStore('editStore', {
             }
             if (top !== undefined)
                 this.curComponent.shapeStyle.top = Math.round(top);
-            if (left !== undefined)
+            if (left !== undefined) {
                 this.curComponent.shapeStyle.left = Math.round(left);
+            }
             if (rotate) this.curComponent.shapeStyle.rotate = Math.round(rotate);
             if (style?.width) this.curComponent.style.width = Math.round(style.width);
             if (style?.height) this.curComponent.style.height = Math.round(style.height);
