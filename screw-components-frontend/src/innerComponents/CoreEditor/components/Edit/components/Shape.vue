@@ -158,9 +158,9 @@ const isActive = () => {
 const innerShapeStyle = computed(() => {
     const style: Record<string, any> = {};
     if (props.isInner) {
-        style.position = 'relative';
+        style.position = '';
     } else {
-        style.position = canvasStyleData.value.position === 'absolute' ? 'absolute' : 'relative';
+        style.position = canvasStyleData.value.position === 'absolute' ? 'absolute' : '';
     }
     return style;
 });
@@ -472,6 +472,7 @@ onMounted(() => {
 });
 
 const handleDragOver = (e: DragEvent) => {
+    console.log('111 :>> ', 111);
     e.preventDefault();
     if (e.dataTransfer) {
         e.dataTransfer.dropEffect = 'copy';

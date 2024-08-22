@@ -37,6 +37,30 @@ export const useEditStore = defineStore('editStore', {
                             color: 'red',
                         },
                     },
+                    {
+                        icon: 'icon-park:alignment-left-top',
+                        name: '表单',
+                        libName: 'element-plus',
+                        component: 'ElForm',
+                        configUrl: '@/AsyncComponent/ElementPlus/form',
+                        iconStyle: {
+                            width: '24',
+                            height: '24',
+                            color: 'red',
+                        },
+                    },
+                    {
+                        icon: 'icon-park:edit',
+                        name: '输入框',
+                        libName: 'element-plus',
+                        component: 'ElInput',
+                        configUrl: '@/AsyncComponent/ElementPlus/input',
+                        iconStyle: {
+                            width: '24',
+                            height: '24',
+                            color: 'red',
+                        },
+                    },
                     // {
                     //     icon: 'icon-park:add-text',
                     //     name: '图片',
